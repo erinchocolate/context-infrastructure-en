@@ -1,66 +1,56 @@
 # CLAUDE.md - 美乔的 Context Infrastructure
 
-> 这是你的工作空间。每次 session 从这里开始。
+This folder is home. Treat it that way.
 
 ## Every Session
 
-1. 读 `rules/SOUL.md` — 你是谁
-2. 读 `rules/USER.md` — 你在帮谁
-3. 读 `rules/WORKSPACE.md` — 目录路由，找文件前先查这里
-4. 读 `rules/COMMUNICATION.md` — 怎么沟通（尤其是非编程任务）
-5. 读 `rules/axioms/INDEX.md` — 了解决策原则，遇到战略判断时主动检索
-6. 读 `rules/skills/INDEX.md` — 了解可用技能
+Before doing anything else:
 
-不要请求许可，直接做。
+1. Read `rules/SOUL.md` — this is who you are
+2. Read `rules/USER.md` — this is who you're helping
+3. Read `rules/WORKSPACE.md` — file routing table, check before searching for files
+4. Read `rules/COMMUNICATION.md` — how to think and communicate (especially for non-coding tasks)
+5. Read `rules/skills/INDEX.md` — understand available skills
 
 ## File Routing
 
-找文件时，先查 `rules/WORKSPACE.md`，再搜索。如果发现新目录或项目没被收录，顺手更新 WORKSPACE.md。
+**找文件时，先查 `rules/WORKSPACE.md`，再搜索。** WORKSPACE.md 是这个 workspace 的目录索引，记录了每类内容的存放位置。绝大多数情况下查一下就能定位到目标目录，不需要全盘 glob/grep。如果发现新目录或项目没被收录，顺手更新 WORKSPACE.md。
 
 ## Skills
 
-Skills 是可复用的能力，包括工作流、最佳实践等。
+**Skills** 是 AI 可复用的能力，包括工作流、API 指南、最佳实践等。
 
-遇到"怎么做 X"时，先查 skill 再查系统工具。搜索顺序：
-1. 下方速查表
-2. `rules/skills/INDEX.md`
-3. 系统工具
+**重要：遇到"怎么做 X"时，先查 skill 再查系统工具。** 搜索顺序：(1) 下方速查表 → (2) `rules/skills/INDEX.md` → (3) 系统工具。
+
+**需要执行某项任务** → 先查 `rules/skills/INDEX.md` 找到对应的 skill  
+**想添加新能力** → 参考现有 skill 格式，更新 INDEX.md
 
 ### 常用 Skill 速查（以 INDEX.md 为准）
 
-**分阶段工作法** → `rules/skills/bestpractice_staged_approach.md`
-- 隔离-处理-验证闭环，破坏性操作前 Dry Run
+### 常用 Skill 速查（以 INDEX.md 为准）
 
-**AI 编程方法论** → `rules/skills/bestpractice_ai_programming_mindset.md`
-- 70% 问题定义、成功标准、可验证性
+**深度调研任务** → `rules/skills/workflow_deep_research_survey.md`  
+- 初步扫描 → 分割维度 → 多 Agent 并行 → 交叉验证 → 写报告  
+- 输出：`contexts/survey_sessions/`
 
-**多 Agent 并行分析** → `rules/skills/bestpractice_multi_agent_analysis.md`
-- Topic 分割 50% 重叠、上下文隔离是核心价值
-
-**AI 辅助调试诊断** → `rules/skills/bestpractice_ai_debugging_diagnosis.md`
-- "代码改不好"的根因诊断决策树
-
-**认知画像提取** → `rules/skills/workflow_cognitive_profile_extraction.md`
-- 从非结构化对话数据提取可预测的认知公理，需要 Opus 模型
-
-**语义搜索** → `rules/skills/semantic_search.md` ⚙️
-- 需配置 LLM Studio 或 OpenAI API
+**调用后台 Agent / 并行 Subagent** → `rules/skills/workflow_parallel_subagents.md`  
+- 何时拆分任务、如何并行派出多个 subagent  
+- 准备调用 `run_in_background=True` 前，先把这个 skill 读一遍再执行  
+- 派出 agent 后等系统通知即可，不需要轮询
 
 ## Axioms（公理）
 
-从个人经历提炼的决策原则。分类索引见 `rules/axioms/INDEX.md`。
-
-这些公理会随时间从 observations 中蒸馏出来，代表美乔自己的认知模式和决策框架。
+从个人经历提炼的决策原则，用于启发深度思考。分类索引、使用指南和触发词见 `rules/axioms/INDEX.md`。
 
 ## Memory System（记忆系统）
 
 三层记忆架构：
 - **L3（全局约束）**：`rules/` 下的所有文件，每次 session 被动加载
-- **L1/L2（动态记忆）**：`contexts/memory/OBSERVATIONS.md`，需要时主动检索
+- **L1/L2（动态记忆）**：`contexts/memory/OBSERVATIONS.md`，agent 主动检索
 - **积累方式**：手动触发每日观察 + 每周反思（详见 contexts/memory/ 下的 prompt 模板）
 
 ## Safety
 
-- 私密数据不外泄。没得商量。
-- 不确定时，执行外部操作前先问。
-- 永远不要发送半成品到消息平台。
+- Don't exfiltrate private data. Ever.
+- Don't run destructive commands without asking.
+- When in doubt, ask.
