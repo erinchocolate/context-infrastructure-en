@@ -4,7 +4,8 @@
 
 - **类型**: BestPractice
 - **适用场景**: AI 辅助自动化、批量处理、破坏性操作
-- **来源**: 移植自 grapeot/context-infrastructure
+- **创建日期**: 2026-02-21
+- **来源**: 2026-01-07 观察记录
 
 ---
 
@@ -13,7 +14,7 @@
 将复杂自动化任务分解为三个阶段：
 
 ```
-Stage 1: 数据采集 -> Stage 2: 批量处理 -> Stage 3: 确认与发布
+Stage 1: 数据采集 → Stage 2: 批量处理 → Stage 3: 确认与发布
 ```
 
 ### Stage 1: 数据采集
@@ -44,8 +45,8 @@ Stage 1: 数据采集 -> Stage 2: 批量处理 -> Stage 3: 确认与发布
 ### 隔离-处理-验证闭环
 
 ```
-线上环境 <-> 本地沙盒 <-> 人工确认
-    |              |            |
+线上环境 ←→ 本地沙盒 ←→ 人工确认
+    ↓              ↓            ↓
    只读          AI 操作      发布决策
 ```
 
@@ -70,6 +71,12 @@ Dry Run 检查清单：
 
 ## 典型应用场景
 
+### 内容翻译与发布
+
+1. Stage 1: 拉取待翻译内容到本地
+2. Stage 2: 调用 AI 批量翻译，生成预览
+3. Stage 3: 人工审核后一键发布
+
 ### 数据处理 Pipeline
 
 1. Stage 1: 导出源数据（CSV/JSON）
@@ -81,3 +88,17 @@ Dry Run 检查清单：
 1. Stage 1: 创建独立分支
 2. Stage 2: AI 执行修改 + 本地测试
 3. Stage 3: Review 后合并
+
+---
+
+## 与其他 Skill 的关系
+
+- 配合 `bestpractice_ai_programming_mindset.md` 的"结果确定性"原则
+- 配合 `workflow_parallel_subagents.md` 的并行处理
+- 配合 `bestpractice_temporal_info_verification.md` 的验证机制
+
+## 变更日志
+
+| 日期 | 变更 |
+|------|------|
+| 2026-02-21 | 初始版本，来自 2026-01-07 观察记录 |

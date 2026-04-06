@@ -33,6 +33,18 @@ Skills 是可复用的能力，包括工作流、最佳实践等。
 **AI 编程方法论** → `rules/skills/bestpractice_ai_programming_mindset.md`
 - 70% 问题定义、成功标准、可验证性
 
+**多 Agent 并行分析** → `rules/skills/bestpractice_multi_agent_analysis.md`
+- Topic 分割 50% 重叠、上下文隔离是核心价值
+
+**AI 辅助调试诊断** → `rules/skills/bestpractice_ai_debugging_diagnosis.md`
+- "代码改不好"的根因诊断决策树
+
+**认知画像提取** → `rules/skills/workflow_cognitive_profile_extraction.md`
+- 从非结构化对话数据提取可预测的认知公理，需要 Opus 模型
+
+**语义搜索** → `rules/skills/semantic_search.md` ⚙️
+- 需配置 LLM Studio 或 OpenAI API
+
 ## Axioms（公理）
 
 从个人经历提炼的决策原则。分类索引见 `rules/axioms/INDEX.md`。
