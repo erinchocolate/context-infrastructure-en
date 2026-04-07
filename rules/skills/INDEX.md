@@ -29,10 +29,12 @@
 
 特定任务的完整工作流程。
 
-- [Confluence 文档导入](./workflow_confluence_import.md) ✅ — 将 Confluence 页面导出为 Markdown 并分类放入 `projects/<name>/docs/`
-  - 适用：初次建立项目 context，或持续同步 Confluence 文档
-  - 三种方法：单页面导出（Word→Markdown）、浏览器复制、REST API 批量导出
-  - 配套工具：`tools/convert_confluence_docs.py`
+- [Confluence 双向同步](./workflow_confluence_import.md) ✅ — Confluence ↔ Repo 文档双向同步
+  - **Push**（repo → Confluence）：`tools/sync_docs_to_confluence.py`
+  - **Pull**（Confluence → repo）：`tools/pull_from_confluence.py`（版本追踪，幂等）
+  - **初始导入**：三种方法（单页面 Word→Markdown、浏览器复制、REST API 批量导出）
+  - **Diagram 策略**：图表在 Confluence 手动维护，不参与自动同步
+  - 配套工具：`tools/convert_confluence_docs.py`（初始批量转换）
 - [认知画像提取工作流](./workflow_cognitive_profile_extraction.md) — 从非结构化对话数据提取可预测的认知公理
   - 适用：群聊/Slack/Discord/邮件/播客转录等任意对话数据
   - 流程：广泛扫描 → 深度验证 → 压力测试 → 定稿（≥3 轮动态滚动）

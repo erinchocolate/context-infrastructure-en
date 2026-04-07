@@ -3,9 +3,10 @@
 ## 元数据
 
 - **类型**: Workflow
-- **适用场景**: 将 Confluence 文档导出为 Markdown，放入 `projects/<name>/docs/` 作为 AI context
+- **适用场景**: Confluence ↔ Repo 双向文档同步；将 Confluence 页面导出为 Markdown，放入 `projects/<name>/docs/` 作为 AI context
 - **创建日期**: 2026-04-07
-- **工具依赖**: `tools/convert_confluence_docs.py`（批量转换）、`html2text`（Python）
+- **更新日期**: 2026-04-08
+- **工具依赖**: `tools/sync_docs_to_confluence.py`（Push）、`tools/pull_from_confluence.py`（Pull）、`tools/convert_confluence_docs.py`（批量初始导入）、`html2text`、`requests`
 
 ---
 
@@ -102,14 +103,124 @@ confluence-markdown-exporter \
 
 ---
 
-## 从 Repo 输出回 Confluence 的工作流
+## 从 Repo 推送回 Confluence（自动脚本）
 
-当你在 repo 中积累了会议记录、决策文档后，定期生成更新的 Confluence 页面：
+使用 `tools/sync_docs_to_confluence.py` 将 `projects/marvin/docs/` 下的 Markdown
+自动推送到 Confluence Cloud Space，维护以下页面层级：
 
-1. 让 AI 根据 `context/meetings/` 和 `context/decisions/` 生成摘要或更新版本的文档
-2. 人工审查 + 调整格式
-3. 在 Confluence 创建/更新对应页面（手动粘贴 Markdown，Confluence 支持 Markdown 粘贴）
-4. 在 `context/status.md` 记录"已同步回 Confluence"
+```
+<CONFLUENCE_ROOT_TITLE>
+├── Architecture  →  docs/architecture/*.md
+├── PRD           →  docs/prd/*.md
+├── SOPs          →  docs/sops/*.md
+└── Research      →  docs/research/*.md
+```
+
+### 首次配置（仅一次）
+
+**1. 获取 Atlassian API Token**
+- 登录 https://id.atlassian.com/manage-profile/security/api-tokens
+- 点击 "Create API token"，命名为 "context-infrastructure-sync"
+
+**2. 配置 .env**
+
+```bash
+cp .env.example .env
+# 填写以下变量：
+CONFLUENCE_URL=https://your-domain.atlassian.net
+CONFLUENCE_EMAIL=your@email.com
+CONFLUENCE_API_TOKEN=<从上一步复制的 token>
+CONFLUENCE_SPACE_KEY=<目标 Space 的 Key，在 Space Settings 中查看>
+CONFLUENCE_ROOT_TITLE=Project Marvin - AI Context  # 可选，有默认值
+```
+
+**3. 安装依赖**
+
+```bash
+source /opt/processes/mc_platform/venv/bin/activate
+pip install md2cf mistune requests html2text
+```
+
+### 日常使用
+
+```bash
+# 干跑：预览哪些页面会被创建/更新，不实际修改 Confluence
+python tools/sync_docs_to_confluence.py --dry-run
+
+# 正式推送
+python tools/sync_docs_to_confluence.py
+```
+
+**幂等性**：脚本维护 `tools/.confluence_page_map.json`（gitignored）记录
+`本地路径 → Confluence page_id` 的映射。首次推送创建页面，后续运行按 page_id
+更新，不会重复创建。
+
+### 注意事项
+
+- 页面标题由文件名自动生成（下划线→空格，Title Case），推送后不要在 Confluence
+  手动修改标题，否则下次推送会找不到原页面（ID 仍在 page map 中，更新不受影响）
+- `context/meetings/`、`context/decisions/` 等动态记录不在推送范围内，仍需手动同步
+- 如果某次推送失败（网络超时等），重新运行即可，已成功的页面不会重复处理
+
+---
+
+## 从 Confluence 拉回 Repo（Pull）
+
+使用 `tools/pull_from_confluence.py` 将 Confluence 上被修改过的页面同步回本地 Markdown 文件。
+
+**前提**：必须先运行过 Push，本地存在 `tools/.confluence_page_map.json`。
+
+### 工作原理
+
+- 读取 `tools/.confluence_page_map.json`（本地路径 → Confluence page_id）
+- 调用 `GET /wiki/rest/api/content/{id}?expand=body.export_view,version`
+- 对比版本号缓存 `tools/.confluence_pull_versions.json`，版本相同则跳过
+- HTML → Markdown（`html2text`），写回本地文件，添加 `> Last updated:` 头
+- 更新版本缓存（gitignored）
+
+### 日常使用
+
+```bash
+# 干跑：预览哪些文件会被更新
+python tools/pull_from_confluence.py --dry-run
+
+# 正式拉取（覆盖本地文件）
+python tools/pull_from_confluence.py
+
+# 强制拉取（忽略版本缓存，全量覆盖）
+python tools/pull_from_confluence.py --force
+```
+
+### 注意事项
+
+- **Confluence 优先**：有冲突时 Confluence 内容覆盖本地，无合并逻辑
+- **只处理 page_map 中已有的页面**：Confluence 上新建的页面需先 Push 建立映射
+- **幂等**：重复运行只更新有版本变化的页面
+
+---
+
+## Diagram 处理策略
+
+**已定策略（2026-04-08）**：Diagram 在 Confluence 上手动维护（图片或宏），不参与自动同步。
+
+| 内容类型 | Push（repo → Confluence） | Pull（Confluence → repo） |
+|---|---|---|
+| 文字内容 | ✅ 自动同步 | ✅ 自动同步 |
+| Mermaid 代码块 | 作为普通代码块上传 | 被 Confluence 版本覆盖（消失）|
+| Confluence 图片/宏 | 不处理 | `html2text` 忽略图片 |
+
+Repo 中的 Mermaid 图表在首次 Pull 后消失；之后 diagram 只在 Confluence 里维护，无需特殊合并逻辑。
+
+---
+
+## 推荐的双向同步节奏
+
+1. Repo 里修改文档 → `python tools/sync_docs_to_confluence.py` Push 到 Confluence
+2. 有人在 Confluence 上改了文字 → `python tools/pull_from_confluence.py` 拉回 repo
+3. 可配合 cron 每天自动 Pull：
+   ```
+   0 8 * * * cd /opt/processes/mc_platform/context-infrastructure && /opt/processes/mc_platform/venv/bin/python tools/pull_from_confluence.py >> /var/log/confluence_pull.log 2>&1
+   ```
 
 ---
 
