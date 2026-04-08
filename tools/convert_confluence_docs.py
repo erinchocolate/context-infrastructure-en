@@ -4,11 +4,17 @@ and categorize them into the appropriate subdirectory.
 
 Usage:
     python tools/convert_confluence_docs.py
+    python tools/convert_confluence_docs.py --input-dir projects/marvin/context --output-dir projects/marvin/context
 
-Reads from:  projects/marvin/docs/*.doc
-Writes to:   projects/marvin/docs/{prd,architecture,sops,research}/
+Reads from:  projects/marvin/docs/*.doc  (default)
+Writes to:   projects/marvin/docs/{prd,architecture,sops,research}/  (default)
+
+Options:
+    --input-dir   DIR   Source directory containing .doc/.docx files (default: projects/marvin/docs)
+    --output-dir  DIR   Destination base directory for converted Markdown (default: same as input-dir)
 """
 
+import argparse
 import email
 import html2text
 import os
@@ -71,7 +77,29 @@ def clean_filename(name: str) -> str:
 
 
 def main():
-    base = Path(__file__).parent.parent / "projects" / "marvin" / "docs"
+    parser = argparse.ArgumentParser(description="Convert Confluence .doc files to Markdown")
+    parser.add_argument(
+        "--input-dir",
+        default=None,
+        help="Source directory containing .doc/.docx files (default: projects/marvin/docs relative to repo root)",
+    )
+    parser.add_argument(
+        "--output-dir",
+        default=None,
+        help="Destination base directory for converted Markdown (default: same as --input-dir)",
+    )
+    args = parser.parse_args()
+
+    repo_root = Path(__file__).parent.parent
+    if args.input_dir:
+        base = Path(args.input_dir) if Path(args.input_dir).is_absolute() else repo_root / args.input_dir
+    else:
+        base = repo_root / "projects" / "marvin" / "docs"
+
+    out_base = Path(args.output_dir) if args.output_dir else base
+    if args.output_dir and not Path(args.output_dir).is_absolute():
+        out_base = repo_root / args.output_dir
+
     doc_files = list(base.glob("*.doc")) + list(base.glob("*.docx"))
 
     if not doc_files:
@@ -92,19 +120,19 @@ def main():
         markdown = html_to_markdown(html)
 
         category = categorize(doc_path.stem)
-        out_dir = base / category
+        out_dir = out_base / category
         out_dir.mkdir(parents=True, exist_ok=True)
 
         out_name = clean_filename(doc_path.stem) + ".md"
         out_path = out_dir / out_name
 
         out_path.write_text(markdown, encoding="utf-8")
-        print(f"  [{category:12s}] {doc_path.name}  →  {category}/{out_name}")
+        print(f"  [{category:12s}] {doc_path.name}  →  {out_dir}/{out_name}")
         converted += 1
 
     print(f"\nDone: {converted} converted, {skipped} skipped.")
     if converted > 0:
-        print("Original .doc files kept in docs/ root — delete manually once you've verified the output.")
+        print("Original .doc files kept — delete manually once you've verified the output.")
 
 
 if __name__ == "__main__":

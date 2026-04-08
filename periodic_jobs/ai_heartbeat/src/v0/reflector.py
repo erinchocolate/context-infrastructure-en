@@ -8,7 +8,7 @@ import sys
 from opencode_client import OpenCodeClient
 from datetime import datetime
 
-KNOWLEDGE_BASE = "/path/to/your/workspace/periodic_jobs/ai_heartbeat/docs/KNOWLEDGE_BASE.md"
+KNOWLEDGE_BASE = "/opt/processes/mc_platform/context-infrastructure/periodic_jobs/ai_heartbeat/docs/KNOWLEDGE_BASE.md"
 
 PROMPT_TEMPLATE = """
 执行记忆系统的"反思与晋升"任务。
@@ -16,7 +16,7 @@ PROMPT_TEMPLATE = """
 SOP: {kb_path}
 
 步骤：
-1. 读取 /contexts/memory/OBSERVATIONS.md，分析 🔴 和高优 🟡 条目
+1. 读取 /opt/processes/mc_platform/context-infrastructure/contexts/memory/OBSERVATIONS.md，分析 🔴 和高优 🟡 条目
 2. 将具有普适性的内容晋升到 rules/，按职责边界分类：
    - SOUL.md: Agent 身份与核心价值观
    - USER.md: 用户画像与人生哲学
@@ -32,9 +32,8 @@ SOP: {kb_path}
 def main():
     import argparse
     parser = argparse.ArgumentParser(description='L2 Reflector Agent')
-    parser.add_argument('--model', default='<your-model-id>',
-                        choices=['<your-model-id>'],
-                        help='Model ID to use')
+    parser.add_argument('--model', default='opencode/big-pickle',
+                        help='Model ID to use (e.g. opencode/big-pickle, opencode/gpt-5-nano)')
     args = parser.parse_args()
     
     model_id = args.model
