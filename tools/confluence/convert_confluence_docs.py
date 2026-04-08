@@ -90,7 +90,7 @@ def main():
     )
     args = parser.parse_args()
 
-    repo_root = Path(__file__).parent.parent
+    repo_root = Path(__file__).parent.parent.parent
     if args.input_dir:
         base = Path(args.input_dir) if Path(args.input_dir).is_absolute() else repo_root / args.input_dir
     else:

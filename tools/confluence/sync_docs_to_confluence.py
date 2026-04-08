@@ -30,7 +30,7 @@ from md2cf.confluence_renderer import ConfluenceRenderer
 
 # ── Paths ───────────────────────────────────────────────────────────────────
 
-REPO_ROOT = Path(__file__).parent.parent
+REPO_ROOT = Path(__file__).parent.parent.parent
 DOCS_ROOT = REPO_ROOT / "projects" / "marvin" / "docs"
 PAGE_MAP_PATH = Path(__file__).parent / ".confluence_page_map.json"
 

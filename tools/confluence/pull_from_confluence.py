@@ -38,7 +38,7 @@ from dotenv import load_dotenv
 # ── Paths ────────────────────────────────────────────────────────────────────
 
 TOOLS_DIR = Path(__file__).parent
-REPO_ROOT = TOOLS_DIR.parent
+REPO_ROOT = TOOLS_DIR.parent.parent
 DOCS_ROOT = REPO_ROOT / "projects" / "marvin" / "docs"
 PAGE_MAP_PATH = TOOLS_DIR / ".confluence_page_map.json"
 VERSIONS_PATH = TOOLS_DIR / ".confluence_pull_versions.json"
