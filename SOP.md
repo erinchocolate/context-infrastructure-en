@@ -1,166 +1,166 @@
-# 每日工作 SOP
+# Daily Work SOP
 
-> 这份文档是日常工作的操作手册。把它当作"每天需要做什么"的清单，不是理论文档。
+> This document is the operational manual for day-to-day work. Treat it as a checklist of "what needs to happen each day," not a theoretical document.
 >
-> 背后的设计哲学：**Context Rot 是 AI 工作流的头号敌人。**
-> AI 的上下文窗口有七秒记忆——每次开新会话，之前的理解归零。
-> 解法是把每天的工作产出持续写进文件，让知识慢慢沉淀成 axiom 和 skill，再在下一次会话中自动生效。
-> 这个飞轮一旦转起来，今天写的东西会让三个月后的工作更精准。
+> The design philosophy behind it: **Context Rot is the number one enemy of AI workflows.**
+> The AI's context window has seven-second memory — every new session, all previous understanding resets to zero.
+> The solution is to continuously write daily work outputs into files, letting knowledge slowly sediment into axioms and skills, which then take effect automatically in the next session.
+> Once this flywheel is spinning, what you write today will make work three months from now more precise.
 
 ---
 
-## 一、每日流程
+## I. Daily Workflow
 
-### ☀️ 早晨：开始工作前（5 分钟）
+### ☀️ Morning: Before Starting Work (5 minutes)
 
-1. 打开 Claude Code，给 AI 一句话说清楚今天要做什么：
+1. Open Claude Code and give the AI a single sentence summarizing what you're doing today:
 
-   > "今天的任务是 [具体目标]。成功标准是 [可验证的结果]。相关文件是 [路径]。"
+   > "Today's task is [specific goal]. The success criterion is [verifiable outcome]. The relevant files are [paths]."
 
-   **为什么**：AI 编程 70% 的问题出在上下文和成功标准不清楚。这一句话是最高 ROI 的投入。
+   **Why**: 70% of AI coding problems come from unclear context and success criteria. This one sentence is the highest-ROI investment.
 
-2. 如果今天开始一个新项目，先更新或创建 `projects/<name>/README.md`
+2. If starting a new project today, first update or create `projects/<name>/README.md`
 
 ---
 
-### 🔧 工作中：随手维护 Context
+### 🔧 During Work: Maintain Context as You Go
 
-**把你本来要告诉同事的话，告诉文件。**
+**Tell the files what you would otherwise tell a colleague.**
 
-#### 维护项目 README
+#### Maintain the Project README
 
-`projects/<name>/README.md` 是 AI 的项目入口。遇到以下情况时顺手更新：
+`projects/<name>/README.md` is the AI's entry point for a project. Update it when:
 
-- 做了重要架构决策
-- 完成了一个阶段/里程碑
-- 发现了重要约束或坑
-- 引入了新工具/依赖
-- 当前工作重点改变了
+- You make an important architectural decision
+- You complete a phase or milestone
+- You discover an important constraint or pitfall
+- You introduce a new tool or dependency
+- The current focus of work changes
 
-一两句话即可，不需要完美。
+A sentence or two is enough — it doesn't need to be perfect.
 
-#### 新文档放对地方
+#### Put New Documents in the Right Place
 
-| 内容 | 存放路径 |
+| Content | Storage Path |
 |---|---|
-| 每日个人活动记录（与 project 无关） | `contexts/daily_log/YYYYMMDD_<name>.md` |
-| 会议记录、决策文档 | `projects/<project>/` 或 `adhoc_jobs/<project>/` |
-| 技术调研、研究报告 | `contexts/research/YYYYMMDD_<name>.md` |
-| 学到的东西、架构复盘、方法论思考 | `contexts/learning/<name>.md` |
-| 代码实验、一次性脚本 | `adhoc_jobs/<project>/` |
+| Daily personal activity log (unrelated to any project) | `contexts/daily_log/YYYYMMDD_<name>.md` |
+| Meeting notes, decision documents | `projects/<project>/` or `adhoc_jobs/<project>/` |
+| Technical research, research reports | `contexts/research/YYYYMMDD_<name>.md` |
+| Things learned, architecture retrospectives, methodology thinking | `contexts/learning/<name>.md` |
+| Code experiments, one-off scripts | `adhoc_jobs/<project>/` |
 
-新目录/项目记得更新 `rules/WORKSPACE.md`。
-
----
-
-### 🌆 结束工作：每日观察（5 分钟）
-
-**这是整个系统最重要的一步。**
-
-在 Claude Code 里粘贴（模板也在 `contexts/memory/PROMPTS.md`）：
-
-```
-回顾今天我们的工作。用红黄绿系统总结关键观察，追加到 contexts/memory/OBSERVATIONS.md：
-
-- 🔴 红色：跨项目的方法论或约束洞察（3 个月后仍有复用价值的认知结晶）
-- 🟡 黄色：活跃项目的关键决策、进展、遇到的问题
-- 🟢 绿色：常规任务完成记录
-
-过滤标准：
-- 只记录有认知价值的内容，不机械记录每个操作
-- 如果今天没有值得记录的观察，就不写
-- 一条观察不超过 2-3 句话
-```
+Remember to update `rules/WORKSPACE.md` when adding new directories or projects.
 
 ---
 
-## 二、每周流程
+### 🌆 End of Work: Daily Observation (5 minutes)
 
-### 📅 周末：每周反思（15 分钟）
+**This is the most important step in the entire system.**
 
-积累 3 天以上观察后触发。
-
-#### 方式 A：手动
+Paste this into Claude Code (template also available in `contexts/memory/PROMPTS.md`):
 
 ```
-读 contexts/memory/OBSERVATIONS.md，分析本周的观察记录：
+Review our work today. Summarize key observations using the red/yellow/green system and append to contexts/memory/OBSERVATIONS.md:
 
-1. 识别重复出现的模式（尤其是红色和高优先黄色条目）
-2. 检查是否有条目满足晋升条件：
-   - 跨项目通用（不只适用于某个特定场景）
-   - 多次验证（出现过 2 次以上）
-   - 有明确应用场景（知道什么时候该用）
-3. 满足条件的，起草为 axiom 或 skill 候选（放到对应目录）
-4. 清理已过期的绿色条目
-5. 合并重复的黄色条目
-6. 将反思结果追加到 OBSERVATIONS.md 的"周反思"区域
+- 🔴 Red: Cross-project methodology or constraint insights (cognitive crystallizations with reuse value 3 months from now)
+- 🟡 Yellow: Key decisions, progress, and problems encountered on active projects
+- 🟢 Green: Routine task completion records
+
+Filtering criteria:
+- Only record content with cognitive value; don't mechanically log every action
+- If there's nothing worth recording today, write nothing
+- Each observation should be no longer than 2-3 sentences
 ```
 
-**晋升目标文件**：
+---
 
-| 内容类型 | 目标文件 |
+## II. Weekly Workflow
+
+### 📅 Weekend: Weekly Reflection (15 minutes)
+
+Trigger after accumulating 3+ days of observations.
+
+#### Method A: Manual
+
+```
+Read contexts/memory/OBSERVATIONS.md and analyze this week's observation records:
+
+1. Identify recurring patterns (especially red and high-priority yellow entries)
+2. Check whether any entries meet promotion criteria:
+   - Cross-project generality (not limited to one specific scenario)
+   - Multiple validations (appeared 2+ times)
+   - Clear application context (you know when to use it)
+3. For entries that qualify, draft them as axiom or skill candidates (place in the corresponding directory)
+4. Clean up expired green entries
+5. Merge duplicate yellow entries
+6. Append the reflection results to the "Weekly Reflection" section of OBSERVATIONS.md
+```
+
+**Promotion target files**:
+
+| Content Type | Target File |
 |---|---|
-| 决策原则、思维框架 | `rules/axioms/<name>.md` + 更新 `INDEX.md` |
-| 可复用工作流、操作流程 | `rules/skills/<name>.md` + 更新 `INDEX.md` |
-| AI 行为/沟通偏好 | `rules/COMMUNICATION.md` |
-| 用户画像更新 | `rules/USER.md` |
-| 工作空间路由变更 | `rules/WORKSPACE.md` |
+| Decision principles, thinking frameworks | `rules/axioms/<name>.md` + update `INDEX.md` |
+| Reusable workflows, operational procedures | `rules/skills/<name>.md` + update `INDEX.md` |
+| AI behavior/communication preferences | `rules/COMMUNICATION.md` |
+| User profile updates | `rules/USER.md` |
+| Workspace routing changes | `rules/WORKSPACE.md` |
 
 ---
 
-## 三、每月流程
+## III. Monthly Workflow
 
-### 🗓️ 月度系统健康检查（30 分钟）
+### 🗓️ Monthly System Health Check (30 minutes)
 
 ```
-对整个 context 系统做一次健康检查：
+Perform a health check on the entire context system:
 
-1. 读 rules/axioms/INDEX.md：现有 axiom 还准确吗？需要基于新证据更新吗？
-2. 读 rules/skills/INDEX.md：有 skill 该退役或合并吗？
-3. 读 contexts/memory/OBSERVATIONS.md：有红色观察积压了好几周没晋升吗？为什么？
-4. 读 CLAUDE.md：太长了吗？需要拆分子文件吗？
-5. 总结系统健康状况和下一步行动项。
+1. Read rules/axioms/INDEX.md: Are the existing axioms still accurate? Do they need updating based on new evidence?
+2. Read rules/skills/INDEX.md: Are there skills that should be retired or merged?
+3. Read contexts/memory/OBSERVATIONS.md: Are there red observations that have been sitting unpromotioned for several weeks? Why?
+4. Read CLAUDE.md: Is it too long? Does it need to be split into sub-files?
+5. Summarize the system health status and next action items.
 ```
 
 ---
 
-## 四、关键原则
+## IV. Key Principles
 
 ### Axiom vs Skill
 
 | | Axiom | Skill |
 |---|---|---|
-| 回答 | 怎么**想** | 怎么**做** |
-| 例子 | "AI 是放大器不是替代品" | "深度调研 workflow" |
-| 来源 | 只能从自身经历蒸馏，不能复制别人的 | 可移植，需适配 |
-| 位置 | `rules/axioms/` | `rules/skills/` |
+| Answers | How to **think** | How to **do** |
+| Example | "AI is an amplifier, not a replacement" | "Deep research workflow" |
+| Source | Can only be distilled from personal experience, not copied from others | Portable, needs adapting |
+| Location | `rules/axioms/` | `rules/skills/` |
 
-### 遇到 AI 反复失败怎么办
+### What to Do When AI Keeps Failing
 
-先诊断三个问题，再换策略：
-1. AI 看到足够的上下文了吗？（报错、日志、相关文件）
-2. 成功标准说清楚了吗？（"不报错"太模糊，"row count 一致"才具体）
-3. 给 AI 验证的方式了吗？
+Diagnose these three questions before switching strategies:
+1. Does the AI have enough context? (error messages, logs, relevant files)
+2. Is the success criterion clearly stated? ("no errors" is too vague; "row count matches" is concrete)
+3. Does the AI have a way to verify its work?
 
-三个都满足了还改不好，才是模型/架构问题。
+If all three are satisfied and it still can't fix things, only then is it a model/architecture problem.
 
-### 什么时候写 Skill
+### When to Write a Skill
 
-**每当你需要向 AI 解释同一个流程第二次——写成 skill。**
+**Every time you need to explain the same process to AI a second time — write it as a skill.**
 
-### CLAUDE.md 膨胀问题
+### CLAUDE.md Bloat
 
-超过 ~200 行就拆分为子文件引用。Context window 是有限资源，密度比长度重要。
+Split into referenced sub-files once it exceeds ~200 lines. Context window is a finite resource; density matters more than length.
 
 ---
 
-## 五、系统文件速查
+## V. System File Quick Reference
 
-| 文件 | 作用 |
+| File | Purpose |
 |---|---|
-| `CLAUDE.md` | Session 入口，AI 每次启动必读 |
-| `rules/WORKSPACE.md` | 目录路由表，找文件前查这里 |
-| `rules/axioms/INDEX.md` | 所有 axiom 的索引 |
-| `rules/skills/INDEX.md` | 所有 skill 的索引 |
-| `contexts/memory/OBSERVATIONS.md` | 每日观察的积累地 |
-| `contexts/memory/PROMPTS.md` | 手动触发观察/反思的 prompt 模板 |
+| `CLAUDE.md` | Session entry point, AI must read this on every startup |
+| `rules/WORKSPACE.md` | Directory routing table, check here before searching for files |
+| `rules/axioms/INDEX.md` | Index of all axioms |
+| `rules/skills/INDEX.md` | Index of all skills |
+| `contexts/memory/OBSERVATIONS.md` | Accumulation point for daily observations |
+| `contexts/memory/PROMPTS.md` | Prompt templates for manually triggering observations/reflections |

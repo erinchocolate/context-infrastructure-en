@@ -1,104 +1,104 @@
-# 分阶段工作法（Staged Approach）
+# Staged Approach
 
-## 元数据
+## Metadata
 
-- **类型**: BestPractice
-- **适用场景**: AI 辅助自动化、批量处理、破坏性操作
-- **创建日期**: 2026-02-21
-- **来源**: 2026-01-07 观察记录
-
----
-
-## 核心框架
-
-将复杂自动化任务分解为三个阶段：
-
-```
-Stage 1: 数据采集 → Stage 2: 批量处理 → Stage 3: 确认与发布
-```
-
-### Stage 1: 数据采集
-
-- 完整拉取源数据到本地
-- 与线上系统隔离
-- 数据落盘后才进入下一阶段
-- 目标：确保后续处理有稳定的数据基础
-
-### Stage 2: 批量处理
-
-- 在本地环境调用 AI
-- 与线上系统完全隔离
-- 可重复执行、可回滚
-- 目标：在安全沙盒中完成 AI 非确定性操作
-
-### Stage 3: 确认与发布
-
-- 人工审核处理结果
-- 一键发布或批量应用
-- 记录变更日志
-- 目标：人为把关最后一道防线
+- **Type**: BestPractice
+- **Applicable Scenarios**: AI-assisted automation, batch processing, destructive operations
+- **Creation Date**: 2026-02-21
+- **Source**: Observation records from 2026-01-07
 
 ---
 
-## 核心原则
+## Core Framework
 
-### 隔离-处理-验证闭环
+Break complex automation tasks into three stages:
 
 ```
-线上环境 ←→ 本地沙盒 ←→ 人工确认
-    ↓              ↓            ↓
-   只读          AI 操作      发布决策
+Stage 1: Data Collection → Stage 2: Batch Processing → Stage 3: Confirmation and Release
 ```
 
-### Dry Run 优先
+### Stage 1: Data Collection
 
-**任何破坏性操作前必须先 Dry Run。**
+- Fully pull source data to local
+- Isolated from online systems
+- Data persisted to disk before moving to the next stage
+- Goal: Ensure subsequent processing has a stable data foundation
 
-破坏性操作包括：
-- 文件覆盖/删除
-- 数据库写入
+### Stage 2: Batch Processing
+
+- Call AI in local environment
+- Fully isolated from online systems
+- Repeatable, rollback-capable
+- Goal: Complete AI non-deterministic operations in a safe sandbox
+
+### Stage 3: Confirmation and Release
+
+- Human review of processing results
+- One-click publish or batch apply
+- Record change log
+- Goal: Human oversight as the final line of defense
+
+---
+
+## Core Principles
+
+### Isolate-Process-Verify Closed Loop
+
+```
+Online Environment ←→ Local Sandbox ←→ Human Confirmation
+       ↓                    ↓                  ↓
+    Read-only           AI Operations      Release Decision
+```
+
+### Dry Run First
+
+**Any destructive operation must first be Dry Run.**
+
+Destructive operations include:
+- File overwrite/deletion
+- Database writes
 - API POST/PUT/DELETE
-- 邮件/消息发送
-- 任何不可逆操作
+- Email/message sending
+- Any irreversible operation
 
-Dry Run 检查清单：
-- [ ] 确认操作范围（影响哪些文件/记录）
-- [ ] 确认操作内容（具体变更是什么）
-- [ ] 确认可回滚（有备份或版本控制）
-- [ ] 确认执行环境（不是生产环境）
-
----
-
-## 典型应用场景
-
-### 内容翻译与发布
-
-1. Stage 1: 拉取待翻译内容到本地
-2. Stage 2: 调用 AI 批量翻译，生成预览
-3. Stage 3: 人工审核后一键发布
-
-### 数据处理 Pipeline
-
-1. Stage 1: 导出源数据（CSV/JSON）
-2. Stage 2: AI 处理 + 校验
-3. Stage 3: 确认后导入目标系统
-
-### 批量代码修改
-
-1. Stage 1: 创建独立分支
-2. Stage 2: AI 执行修改 + 本地测试
-3. Stage 3: Review 后合并
+Dry Run checklist:
+- [ ] Confirm scope of operation (which files/records are affected)
+- [ ] Confirm operation content (what exactly changes)
+- [ ] Confirm rollback capability (backup or version control exists)
+- [ ] Confirm execution environment (not production environment)
 
 ---
 
-## 与其他 Skill 的关系
+## Typical Application Scenarios
 
-- 配合 `bestpractice_ai_programming_mindset.md` 的"结果确定性"原则
-- 配合 `workflow_parallel_subagents.md` 的并行处理
-- 配合 `bestpractice_temporal_info_verification.md` 的验证机制
+### Content Translation and Publishing
 
-## 变更日志
+1. Stage 1: Pull content to be translated to local
+2. Stage 2: Call AI for batch translation, generate preview
+3. Stage 3: Human review, then one-click publish
 
-| 日期 | 变更 |
-|------|------|
-| 2026-02-21 | 初始版本，来自 2026-01-07 观察记录 |
+### Data Processing Pipeline
+
+1. Stage 1: Export source data (CSV/JSON)
+2. Stage 2: AI processing + validation
+3. Stage 3: Import to target system after confirmation
+
+### Batch Code Modifications
+
+1. Stage 1: Create independent branch
+2. Stage 2: AI executes modifications + local testing
+3. Stage 3: Merge after review
+
+---
+
+## Relationship to Other Skills
+
+- Works with the "outcome certainty" principle in `bestpractice_ai_programming_mindset.md`
+- Works with the parallel processing in `workflow_parallel_subagents.md`
+- Works with the verification mechanism in `bestpractice_temporal_info_verification.md`
+
+## Change Log
+
+| Date | Change |
+|------|--------|
+| 2026-02-21 | Initial version, from 2026-01-07 observation records |

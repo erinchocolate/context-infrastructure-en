@@ -8,7 +8,7 @@ class EmbeddingClient:
         self.model = model
 
     def embed(self, text: str) -> List[float]:
-        """获取单条文本的 embedding。"""
+        """Get the embedding for a single text."""
         text = text.replace("\n", " ")
         try:
             resp = self.client.embeddings.create(input=[text], model=self.model)
@@ -18,7 +18,7 @@ class EmbeddingClient:
             raise
 
     def embed_batch(self, texts: List[str], batch_size: int = 32) -> List[List[float]]:
-        """批量获取 embedding。"""
+        """Get embeddings for a batch of texts."""
         results = []
         for i in range(0, len(texts), batch_size):
             batch = [t.replace("\n", " ") for t in texts[i:i+batch_size]]

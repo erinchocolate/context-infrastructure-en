@@ -1,166 +1,166 @@
-# 深度调研工作流
+# Deep Research Workflow
 
-## 元数据
+## Metadata
 
-- **类型**: Workflow
-- **适用场景**: 需要对某个主题进行深度、全面、可验证的第三方调研
-- **输出位置**: `contexts/research/`
-- **创建日期**: 2026-02-19
-- **最后更新**: 2026-03-09
+- **Type**: Workflow
+- **Applicable Scenarios**: In-depth, comprehensive, verifiable third-party research on a topic
+- **Output Location**: `contexts/research/`
+- **Creation Date**: 2026-02-19
+- **Last Updated**: 2026-03-09
 
-## 核心原则
+## Core Principles
 
-1. **交叉验证**: 多个独立调研员（sub-agent）调研有重叠的主题，发现矛盾
-2. **可追溯性**: 所有引用必须保留URL，方便后续验证和留存
-3. **逐步聚焦**: 从宽到窄，先了解全貌再深入细节
-4. **单一交付**: 最终只交付一个汇总报告，中间结果不保存
+1. **Cross-validation**: Multiple independent researchers (sub-agents) research overlapping topics to discover contradictions
+2. **Traceability**: All citations must retain URLs for subsequent verification and archiving
+3. **Progressive Focus**: From broad to narrow; understand the full picture before diving into details
+4. **Single Deliverable**: Only one consolidated report is delivered at the end; intermediate results are not saved
 
-## 工作流程
+## Workflow
 
-### Phase 1: 初步扫描
+### Phase 1: Initial Scan
 
-**目标**: 快速了解调研对象的全貌，识别关键维度
+**Goal**: Quickly understand the full picture of the research subject, identify key dimensions
 
-**操作**:
-1. 使用 Tavily 进行 2-3 次搜索，覆盖：
-   - 调研对象的基本信息（是什么）
-   - 市场评价（别人怎么说）
-   - 争议点（有什么批评）
-2. 总结出 3-5 个需要深入调研的维度
+**Operations**:
+1. Use Tavily for 2-3 searches covering:
+   - Basic information about the subject (what it is)
+   - Market evaluation (what others say)
+   - Controversies (what criticisms exist)
+2. Summarize 3-5 dimensions requiring deeper research
 
-**输出**: 初步印象笔记（不需要存文件，在内存中）
+**Output**: Preliminary impressions notes (no need to save to file, kept in memory)
 
-### Phase 2: 分割与并行调研
+### Phase 2: Split and Parallel Research
 
-**目标**: 多角度深入调研，发现信息矛盾和交叉验证点
+**Goal**: In-depth multi-angle research, discover information contradictions and cross-validation points
 
-**分割原则**:
-- 划分 3-5 个调研维度
-- **关键**: 维度之间必须有 ≥50% 的 overlap
-  - 例如：调研"课程A"时，维度1是"正面评价"，维度2是"用户案例"，维度3是"价格对比"
-  - 维度1和维度2都会收集用户反馈，维度2和维度3都会讨论价值感知
-  - Overlap 让不同 agent 可能发现相同信息的不同解读，或互相矛盾的结论
+**Splitting Principles**:
+- Divide into 3-5 research dimensions
+- **Key**: Dimensions must have ≥50% overlap
+  - Example: Researching "Course A," Dimension 1 is "positive reviews," Dimension 2 is "user cases," Dimension 3 is "price comparison"
+  - Dimensions 1 and 2 both collect user feedback; Dimensions 2 and 3 both discuss value perception
+  - Overlap lets different agents potentially discover different interpretations of the same information, or mutually contradictory conclusions
 
-**启动 Sub-agent**:
+**Launch Sub-agents**:
 
-同时启动 3-5 个 sub-agent，每个负责一个维度。使用以下类型：
+Launch 3-5 sub-agents simultaneously, each responsible for one dimension. Use the following types:
 
-- `librarian` — 外部调研首选，查文档、开源代码、官方资料
-- `deep` category — 自主深度调研，适合复杂多源任务
+- `librarian` — preferred for external research, look up documentation, open-source code, official materials
+- `deep` category — autonomous in-depth research, suitable for complex multi-source tasks
 
 ```
 task(
   subagent_type="librarian",
   load_skills=[],
-  description="调研 XX 维度",
+  description="Research dimension XX",
   run_in_background=true,
-  prompt="[具体调研维度的 prompt]"
+  prompt="[specific research dimension prompt]"
 )
 
-# 或用 deep category 做更自主的调研
+# Or use deep category for more autonomous research
 task(
   category="deep",
   load_skills=[],
-  description="调研 XX 维度",
+  description="Research dimension XX",
   run_in_background=true,
-  prompt="[具体调研维度的 prompt]"
+  prompt="[specific research dimension prompt]"
 )
 ```
 
-**Tavily 参数偏好**（用于 web 搜索）:
-- `max_results=6`（覆盖不足可提至 10）
+**Tavily Parameter Preferences** (for web search):
+- `max_results=6` (can increase to 10 if coverage is insufficient)
 - `search_depth="advanced"`
-- `include_answer=true`（获取聚合摘要）
-- 按需启用 `include_images` / `include_image_descriptions`
+- `include_answer=true` (get aggregated summaries)
+- Enable `include_images` / `include_image_descriptions` as needed
 
-每个 sub-agent 的 prompt 中明确：
-1. 具体要调研什么
-2. 必须返回 URL 和原文摘录（不是总结）
-3. 可以覆盖的其他相关维度（形成 overlap）
-4. **不需要**将结果写入文件，只需返回给主 agent
+In each sub-agent's prompt, specify:
+1. What exactly to research
+2. Must return URLs and original excerpts (not summaries)
+3. Other relevant dimensions that can be covered (to form overlap)
+4. Results **do not need** to be written to files, just returned to the main agent
 
-**重要**: sub-agent 的结果是**中间产物**，不需要保存到文件系统
+**Important**: Sub-agent results are **intermediate artifacts** and do not need to be saved to the file system
 
-### Phase 3: 整合与交叉验证
+### Phase 3: Integration and Cross-Validation
 
-**目标**: 发现矛盾，形成可信结论
+**Goal**: Discover contradictions, form credible conclusions
 
-**操作**:
-1. 对比各 sub-agent 返回的结果
-2. 重点关注：
-   - 多个 agent 都发现的信息 → 可信度高
-   - 只有单一来源的信息 → 标注来源，提醒验证
-   - 互相矛盾的信息 → 特别标注，分析原因
-3. 如果发现重大矛盾，可以再启动 sub-agent 针对性验证
+**Operations**:
+1. Compare results returned by each sub-agent
+2. Focus on:
+   - Information found by multiple agents → high credibility
+   - Information from a single source only → annotate source, suggest verification
+   - Mutually contradictory information → specifically annotate, analyze reasons
+3. If major contradictions are found, can launch additional sub-agents for targeted verification
 
-### Phase 4: 撰写最终报告
+### Phase 4: Write Final Report
 
-**目标**: 输出**一个**可留存、可追溯的中文调研报告
+**Goal**: Output **one** storable, traceable English research report
 
-**格式要求**:
-- 中文 Markdown
-- 所有引用必须有 URL（使用 Markdown 链接格式）
-- 关键引用保留原文摘录（不是总结）
-- 结构清晰：核心结论 → 分维度分析 → 交叉验证 → 结论与建议
+**Format Requirements**:
+- English Markdown
+- All citations must have URLs (use Markdown link format)
+- Key citations retain original text excerpts (not summaries)
+- Clear structure: core conclusions → dimension-by-dimension analysis → cross-validation → conclusions and recommendations
 
-**存储位置**: `contexts/research/<topic>_survey_YYYYMMDD.md`
+**Storage Location**: `contexts/research/<topic>_survey_YYYYMMDD.md`
 
-**命名规则**: 
-- 英文主题：`<topic>_survey_YYYYMMDD.md`
-- 中文主题：可以用拼音或英文关键词
+**Naming Convention**: 
+- English topics: `<topic>_survey_YYYYMMDD.md`
+- Non-English topics: use pinyin or English keywords
 
-**重要**: 
-- 只生成**一个**最终报告文件
-- 不保存 sub-agent 的中间结果
-- 不保存原始调研笔记
+**Important**: 
+- Generate only **one** final report file
+- Do not save sub-agent intermediate results
+- Do not save raw research notes
 
-## URL 留存规范
+## URL Retention Standards
 
-### 必须保留 URL 的情况
+### When URLs Must Be Retained
 
-1. **直接引用**: 引用他人的原话或观点
-2. **数据来源**: 任何数字、统计、评分
-3. **评价来源**: 正面或负面评价的出处
-4. **官方信息**: 产品/课程/公司的官方描述
+1. **Direct citations**: Quoting another person's words or opinions
+2. **Data sources**: Any numbers, statistics, scores
+3. **Evaluation sources**: Source of positive or negative evaluations
+4. **Official information**: Official descriptions of products/courses/companies
 
-### URL 格式
+### URL Format
 
 ```markdown
-**来源描述**（URL）
-> 原文摘录
+**Source description** (URL)
+> Original text excerpt
 
-或
+or
 
-某平台上有人评价（URL）：
-> "原文"
+Someone commented on a platform (URL):
+> "Original text"
 > 
-> （👍 X 👎 Y）  # 如果有点赞数据也要保留
+> (👍 X 👎 Y)  # Retain like/dislike data if available
 ```
 
-### 避免的问题
+### Problems to Avoid
 
-- ❌ "有人评价说..."（没有URL）
-- ❌ "网上有文章批评..."（没有URL）
-- ❌ 只总结不引用原文（无法验证）
+- ❌ "Someone commented that..." (no URL)
+- ❌ "There are articles online criticizing..." (no URL)
+- ❌ Only summarizing without citing original text (cannot be verified)
 
-## 常见调研维度参考
+## Common Research Dimension References
 
-| 调研对象 | 可能的维度 |
-|---------|-----------|
-| 产品/服务 | 功能评价、价格对比、用户案例、负面反馈、竞品分析 |
-| 课程/培训 | 课程内容、讲师背景、学员评价、价格价值、替代方案 |
-| 公司/组织 | 业务模式、市场地位、口碑评价、争议事件、财务状况 |
-| 技术/工具 | 技术原理、使用体验、适用场景、局限性、替代方案 |
-| 观点/框架 | 共识程度、权威背书、反对声音、实际落地、时间线准确性 |
+| Research Subject | Possible Dimensions |
+|-----------------|---------------------|
+| Products/Services | Feature evaluation, price comparison, user cases, negative feedback, competitor analysis |
+| Courses/Training | Course content, instructor background, student reviews, price/value, alternatives |
+| Companies/Organizations | Business model, market position, reputation, controversy, financial status |
+| Technology/Tools | Technical principles, user experience, applicable scenarios, limitations, alternatives |
+| Opinions/Frameworks | Consensus level, authoritative endorsement, opposing voices, real-world implementation, timeline accuracy |
 
-## 陷阱与对策
+## Traps and Countermeasures
 
-| 陷阱 | 对策 |
-|-----|------|
-| 只搜到正面信息 | 专门搜索"criticism", "negative review", "scam", "overpriced" |
-| 信息来源单一 | 强制要求 sub-agent 找多个独立来源 |
-| 过度总结丢失细节 | 要求保留原文摘录，不只是总结 |
-| 维度划分太干净没有 overlap | 设计维度时故意让边缘模糊 |
-| Sub-agent 返回的信息太浅 | 在 prompt 中强调"深度"、"具体"、"原文" |
-| 中间文件堆积 | 只生成一个最终报告，不保存中间结果 |
-| 用错 subagent 类型 | 外部调研用 `librarian` 或 `deep`，`explore` 只用于内部 codebase 搜索 |
+| Trap | Countermeasure |
+|-----|----------------|
+| Only finding positive information | Specifically search "criticism", "negative review", "scam", "overpriced" |
+| Single information source | Require sub-agents to find multiple independent sources |
+| Over-summarizing loses details | Require original text excerpts, not just summaries |
+| Dimension division too clean with no overlap | Deliberately blur edges when designing dimensions |
+| Sub-agent returns too shallow information | Emphasize "depth," "specificity," "original text" in prompt |
+| Intermediate files pile up | Generate only one final report, do not save intermediate results |
+| Using wrong subagent type | Use `librarian` or `deep` for external research; `explore` only for internal codebase search |

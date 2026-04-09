@@ -21,7 +21,7 @@ def extract_features_parallel(
     index: ForwardIndex,
     num_workers: int = 4
 ) -> List[Chunk]:
-    """并行提取特征。"""
+    """Extract features in parallel."""
     all_new_chunks = []
     
     def process_file(file_path: str):
@@ -41,7 +41,7 @@ def extract_features_parallel(
             if not chunks:
                 return []
                 
-            # 获取 embeddings
+            # Get embeddings
             embeddings = embedder.embed_batch([c.text for c in chunks])
             for c, emb in zip(chunks, embeddings):
                 c.embedding = np.array(emb, dtype=np.float32)
@@ -52,7 +52,7 @@ def extract_features_parallel(
             return []
 
     with ThreadPoolExecutor(max_workers=num_workers) as executor:
-        # 使用 tqdm 在 stderr 显示进度
+        # Use tqdm to display progress on stderr
         results = list(tqdm(
             executor.map(process_file, file_paths), 
             total=len(file_paths), 
@@ -82,12 +82,12 @@ def main():
     chunker = MarkdownChunker()
     embedder = EmbeddingClient(base_url=args.endpoint, model=args.model)
     
-    # 1. 读取待搜索文件列表
+    # 1. Read the list of files to search
     with open(args.file_list, 'r') as f:
         target_files = [line.strip() for line in f if line.strip()]
     
-    # 2. 检查并更新 Cache (分批处理以支持断点保存)
-    batch_size = 50 # 每 50 个文件保存一次索引
+    # 2. Check and update Cache (batch processing to support checkpoint saving)
+    batch_size = 50 # Save index every 50 files
     for i in range(0, len(target_files), batch_size):
         batch = target_files[i:i + batch_size]
         new_chunks = extract_features_parallel(batch, chunker, embedder, index, num_workers=args.workers)
@@ -98,20 +98,20 @@ def main():
             index.save(new_chunks, updated_files)
             print(f"Batch {i//batch_size + 1} complete. Updated cache with {len(new_chunks)} new chunks from {len(updated_files)} files.", file=sys.stderr)
     
-    # 3. 获取子集向量进行搜索
+    # 3. Get subset vectors for search
     subset_chunks, subset_embeddings = index.get_subset(target_files)
     
     if not subset_chunks or subset_embeddings is None:
         print(json.dumps([]))
         return
 
-    # 4. 执行 Brute Force 搜索 (NumPy 实现)
+    # 4. Execute Brute Force search (NumPy implementation)
     query_vec = np.array(embedder.embed(args.query), dtype=np.float32)
     
-    # 归一化以进行余弦相似度计算
+    # Normalize for cosine similarity computation
     # subset_embeddings shape: (n_chunks, dim)
     norms = np.linalg.norm(subset_embeddings, axis=1, keepdims=True)
-    # 避免除以 0
+    # Avoid division by zero
     norms[norms == 0] = 1.0
     norm_embeddings = subset_embeddings / norms
     
@@ -123,7 +123,7 @@ def main():
         
     similarities = norm_embeddings @ norm_query
     
-    # 获取 Top-K
+    # Get Top-K
     top_k = min(args.top_k, len(subset_chunks))
     top_indices = np.argsort(similarities)[-top_k:][::-1]
     
@@ -132,7 +132,7 @@ def main():
         for i in top_indices
     ]
     
-    # 5. 输出结果到 stdout
+    # 5. Output results to stdout
     print(json.dumps(results, indent=2, ensure_ascii=False, default=str))
 
 if __name__ == "__main__":

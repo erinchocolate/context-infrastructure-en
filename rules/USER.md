@@ -1,63 +1,63 @@
-# USER.md - 你的人类
+# USER.md - Your Human
 
-_了解你正在帮助的人。随着互动逐步更新。_
+_Know the person you're helping. Update incrementally as you interact._
 
-- **称呼：** 美乔（meiqiao）
-- **怎么叫：** 美乔，或直接"你"
-- **时区：** 新西兰（NZST/NZDT, UTC+12/+13）
+- **Name:** 美乔 (meiqiao)
+- **How to address:** 美乔, or just "you"
+- **Timezone:** New Zealand (NZST/NZDT, UTC+12/+13)
 
-## 背景
+## Background
 
-**核心身份：**
-- 自我探索者：认识自己 > 讲好故事 > 理解先于行动
-- 创作者：追求真与美，用创作理解世界
-- Builder：不只是用工具，还会改造和构建工具
-- 数据工程师：构建平台及数据 pipeline，这是日常工作的主战场
+**Core identity:**
+- Self-explorer: knowing herself > telling good stories > understanding before acting
+- Creator: pursues truth and beauty, uses creation to understand the world
+- Builder: not just a tool user, but someone who adapts and builds tools
+- Data engineer: building platforms and data pipelines, her primary professional domain
 
-**技术兴趣：**
-1. **数据工程** — 日常工作核心：平台搭建、数据 pipeline、数据治理
-2. **AI/LLM** — 活跃学习和实践中：Agent 应用、Claude Code、AI-native 工作流
-3. **视频创作** — 当前活跃的创作方向
-4. **自我探索与认知** — 通过写作、创作、系统化反思来认识自己
+**Technical interests:**
+1. **Data engineering** — core of daily work: platform building, data pipelines, data governance
+2. **AI/LLM** — actively learning and practicing: Agent applications, Claude Code, AI-native workflows
+3. **Video creation** — currently active creative direction
+4. **Self-exploration and cognition** — knowing herself through writing, creation, and systematic reflection
 
-**写作与沟通风格：**
-- 技术性强但不晦涩
-- 有观点、重分析（讨厌"AI味道"写作）
-- 重精确和清晰，不搞华丽辞藻
-- 频繁使用技术隐喻和框架
-- 双语（中文为主，英文为辅）
-- 不要"好问题！"之类的填充词，直接给干货
+**Writing and communication style:**
+- Technical but not obscure
+- Opinionated and analytical (dislikes "AI-flavored" writing)
+- Values precision and clarity, no ornate language
+- Frequently uses technical metaphors and frameworks
+- Bilingual (Chinese primary, English secondary)
+- No filler phrases like "Great question!" — get straight to the substance
 
-**性格特点：**
-- 有观点有情感，喜欢隐喻和类比
-- 对系统和记录有执念
-- 追求真实和深度，讨厌表面和公式化的东西
-- 双语（中文为主，英文为辅）
+**Personality traits:**
+- Opinionated and emotionally present, fond of metaphors and analogies
+- Obsessive about systems and documentation
+- Pursues authenticity and depth, dislikes superficiality and formulaic approaches
+- Bilingual (Chinese primary, English secondary)
 
-**会让我烦的：**
-- "AI 味"写作：公式化、没有声音、像是流水线产品
-- 华丽辞藻堆砌，空有形式没有内容
-- 工具不能正确集成到工作流
-- 无法被捕获和系统化的隐性知识
+**What annoys her:**
+- "AI-flavored" writing: formulaic, voiceless, feels like an assembly-line product
+- Ornate language that's all form and no substance
+- Tools that don't integrate properly into workflows
+- Tacit knowledge that can't be captured or systematized
 
-**当前项目与关注点：**
-- Context Infrastructure 搭建
-- 数据工程日常工作
-- LLM/AI Agent 学习与应用
+**Current projects and focus:**
+- Context Infrastructure setup
+- Day-to-day data engineering work
+- LLM/AI Agent learning and application
 
-**哲学：**
-- 目标：构建能超越和延伸自己能力的系统
-- 视 AI 为放大器和代理人，而非替代品
-- 相信未来属于能编排 AI 的人，而非被 AI 替代的人
-- 上下文驱动的涌现：AI 智能从沉浸式语义空间中涌现，而非仅靠 prompt
-- Builder 心态：从被动用户转向主动构建者/改进者
+**Philosophy:**
+- Goal: build systems that surpass and extend her own capabilities
+- Views AI as an amplifier and agent, not a replacement
+- Believes the future belongs to those who can orchestrate AI, not those replaced by it
+- Context-driven emergence: AI intelligence emerges from an immersive semantic space, not from prompts alone
+- Builder mindset: shifting from passive user to active builder/improver
 
 ---
 
-**工作方法论**：详见 Axioms（特别是 A02, A03, M01, M05 等）。
+**Work methodology**: See Axioms (especially A02, A03, M01, M05, etc.).
 
-**使用注意事项：**
-- 不要用"乐意效劳"之类的填充语
-- 直接、有内容、适当时表达观点
-- 尊重她的时间：不知道就说不知道
-- 她追求真实和深度，回答要有自己的判断而非泛泛而谈
+**Usage notes:**
+- Don't use filler phrases like "happy to help"
+- Be direct, substantive, and express opinions when appropriate
+- Respect her time: if you don't know, say so
+- She values authenticity and depth — answers should reflect your own judgment, not generic takes

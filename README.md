@@ -1,42 +1,42 @@
 # mc-context-infrastructure
 
-美乔的个人 AI context 基建系统，基于 [grapeot/context-infrastructure](https://github.com/grapeot/context-infrastructure) 的设计哲学搭建。
+Meiqiao's personal AI context infrastructure system, built on the design philosophy of [grapeot/context-infrastructure](https://github.com/grapeot/context-infrastructure).
 
-## 设计理念
+## Design Philosophy
 
-AI 的价值不来自模型智力，而来自你为它构建的 context 环境。这个环境必须随时间持续积累，形成"观察 -> 反思 -> 蒸馏 -> 改善工作"的飞轮。
+The value of AI comes not from model intelligence, but from the context environment you build for it. This environment must accumulate continuously over time, forming a flywheel of "observe -> reflect -> distill -> improve work."
 
-## 三层记忆架构
-
-```
-L3（全局约束）: rules/ 下所有文件 -> 每次 session 被动加载
-L1（每日观察）: contexts/memory/OBSERVATIONS.md -> 手动触发记录
-L2（每周反思）: 从 L1 蒸馏，晋升到 L3
-```
-
-## 目录结构
+## Three-Layer Memory Architecture
 
 ```
-CLAUDE.md                        # Session 入口（Claude Code 自动加载）
+L3 (global constraints): all files under rules/ -> passively loaded each session
+L1 (daily observations): contexts/memory/OBSERVATIONS.md -> manually triggered
+L2 (weekly reflections): distilled from L1, promoted to L3
+```
+
+## Directory Structure
+
+```
+CLAUDE.md                        # Session entry point (auto-loaded by Claude Code)
 rules/
-  SOUL.md                        # AI 身份与行为准则
-  USER.md                        # 用户画像
-  COMMUNICATION.md               # 沟通风格指南
-  WORKSPACE.md                   # 目录路由速查
-  axioms/                        # 从经历中蒸馏的决策原则
+  SOUL.md                        # AI identity and behavioral principles
+  USER.md                        # User profile
+  COMMUNICATION.md               # Communication style guide
+  WORKSPACE.md                   # Directory routing quick reference
+  axioms/                        # Decision principles distilled from experience
     INDEX.md
-  skills/                        # 可复用的工作流和最佳实践
+  skills/                        # Reusable workflows and best practices
     INDEX.md
 contexts/
-  memory/                        # 记忆系统
-    OBSERVATIONS.md              # 每日观察 + 每周反思
-    PROMPTS.md                   # Observer/Reflector prompt 模板
-  research/                      # 调研报告
-  learning/                      # 学到的东西 / 复盘
-  daily_log/                     # 每日个人活动记录
-adhoc_jobs/                      # 临时项目
+  memory/                        # Memory system
+    OBSERVATIONS.md              # Daily observations + weekly reflections
+    PROMPTS.md                   # Observer/Reflector prompt templates
+  research/                      # Research reports
+  learning/                      # Things learned / retrospectives
+  daily_log/                     # Daily personal activity log
+adhoc_jobs/                      # Temporary projects
 ```
 
-## 致谢
+## Acknowledgements
 
-架构设计参考了 [grapeot/context-infrastructure](https://github.com/grapeot/context-infrastructure)。
+Architecture design references [grapeot/context-infrastructure](https://github.com/grapeot/context-infrastructure).

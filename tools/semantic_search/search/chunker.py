@@ -9,7 +9,7 @@ class MarkdownChunker:
         self.overlap = overlap
 
     def parse_yaml_frontmatter(self, content: str) -> tuple[Dict[str, Any], str]:
-        """提取 YAML 元数据和正文。"""
+        """Extract YAML frontmatter metadata and body text."""
         if content.startswith('---'):
             parts = re.split(r'^---', content, flags=re.MULTILINE)
             if len(parts) >= 3:
@@ -22,7 +22,7 @@ class MarkdownChunker:
         return {}, content.strip()
 
     def chunk(self, file_path: str, content: str) -> List[Chunk]:
-        """按标题分块并保留元数据。"""
+        """Split content into chunks by heading, preserving metadata."""
         metadata, body = self.parse_yaml_frontmatter(content)
         chunks = []
         

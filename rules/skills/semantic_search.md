@@ -1,111 +1,111 @@
-# 语义搜索技能 (Semantic Search Skill)
-## 1. 技能概览
+# Semantic Search Skill
+## 1. Skill Overview
 
-`semantic-search` 是一个**通用语义搜索工具**，可对任意本地文本文件建索引并做自然语言查询。它超越关键词匹配，理解语义层面的关联，适用于任何需要从大量文本中按意义而非字面检索内容的场景。
+`semantic-search` is a **general-purpose semantic search tool** that can index any local text files and perform natural language queries. It goes beyond keyword matching to understand semantic-level associations, and is suitable for any scenario requiring content retrieval by meaning rather than literal text from large volumes of text.
 
-最典型的使用场景是搜索用户的个人知识库（博客、日志、调研报告），但工具本身不限于此。`--file-list` 可以指向任何文本文件集合：聊天记录、第三方文档、调研素材、代码注释等。
+The most typical use case is searching the user's personal knowledge base (blog posts, logs, research reports), but the tool is not limited to this. `--file-list` can point to any collection of text files: chat records, third-party documents, research materials, code comments, etc.
 
-**对于用户的知识库，这是获取深层偏好和个人哲学的核心工具，是实现 AI Heartbeat Step 2 (Reflection Layer) 的关键基础设施。**
+**For the user's knowledge base, this is the core tool for accessing deep preferences and personal philosophy, and is the key infrastructure for implementing AI Heartbeat Step 2 (Reflection Layer).**
 
-### 1.1 何时使用
+### 1.1 When to Use
 
-**场景 A：搜索用户的知识库（最常见）**
- **深度背景挖掘**：了解用户在某个话题（如 "Agentic AI"、"天文摄影"）上的长期观点演变。
- **关联思考**：寻找与当前任务相关的历史实验、随笔或反思，即使关键词不完全匹配。
- **决策支持**：调取过去的复盘或设计讨论，为当前架构决策提供参考。
- **消除歧义**：当用户提到一个模糊的概念时，找到最相关的历史定义。
- **构建 Axiom / Digital Twin**：沉淀公理或深度反思时，**必须**先执行语义搜索以对齐历史认知。
+**Scenario A: Searching the user's knowledge base (most common)**
+ **Deep background mining**: Understand the user's long-term evolution of views on a topic (e.g., "Agentic AI," "astrophotography").
+ **Associative thinking**: Find historical experiments, essays, or reflections related to the current task, even when keywords don't exactly match.
+ **Decision support**: Retrieve past reviews or design discussions to provide reference for current architectural decisions.
+ **Disambiguation**: When the user mentions a vague concept, find the most relevant historical definition.
+ **Building Axioms / Digital Twin**: When consolidating axioms or deep reflections, **must** first perform semantic search to align with historical cognition.
 
-**场景 B：分析任意文本集合**
- **第三方内容分析**：在聊天记录、访谈转录、会议纪要中按主题检索（如"找出某人关于 AI 的所有讨论"）。
- **调研素材挖掘**：在一批下载的文档/报告中做语义检索，找到关键词搜不到的相关段落。
- **认知画像提取**：从大量对话数据中按维度（技术观点、价值观、方法论）提取模式。
- **跨文档主题发现**：在异构文本集合中发现语义相关但措辞不同的内容。
+**Scenario B: Analyzing any text collection**
+ **Third-party content analysis**: Search by topic in chat records, interview transcripts, meeting minutes (e.g., "find all discussions about AI from a specific person").
+ **Research material mining**: Do semantic retrieval in a batch of downloaded documents/reports, finding relevant paragraphs that keyword search wouldn't find.
+ **Cognitive profile extraction**: Extract patterns by dimension (technical opinions, values, methodology) from large amounts of conversational data.
+ **Cross-document topic discovery**: Discover semantically related but differently phrased content in heterogeneous text collections.
 
-### 1.2 触发建议
+### 1.2 Trigger Recommendations
 
-**主动触发（务必执行）**：
- 当你在构建 `rules/axioms/` 下的公理文档时
- 当任务涉及用户的核心价值观、方法论或哲学体系时
- 当你需要理解用户在某个领域的"思想演变史"时
- 当你在做反思层工作（沉淀公理、深度复盘）时
- 当你需要从大量文本中按主题或语义维度提取信息时（不限于用户的内容）
+**Active triggers (must execute)**:
+ When you are building axiom documents under `rules/axioms/`
+ When the task involves the user's core values, methodology, or philosophical system
+ When you need to understand the user's "intellectual evolution history" in a certain domain
+ When doing reflection-layer work (consolidating axioms, deep reviews)
+ When you need to extract information from large volumes of text by topic or semantic dimension (not limited to the user's content)
 
-**被动触发（用户明确要求）**：
- "搜一下我之前对 X 的看法"
- "找找看有没有相关的背景资料"
- "帮我总结一下在 Y 这个话题上的思考"
- "我以前是怎么解决类似问题的？"
- "在这批聊天记录/文档里找 X 相关的内容"
- "分析某人在 Y 话题上的观点"
+**Passive triggers (user explicitly requests)**:
+ "Search what I thought about X before"
+ "Look for whether there is relevant background material"
+ "Help me summarize thinking on topic Y"
+ "How did I solve similar problems before?"
+ "Find X-related content in this batch of chat records/documents"
+ "Analyze someone's views on topic Y"
 
 ---
 
-## 2. 使用说明
+## 2. Usage Instructions
 
-### 2.1 核心命令
+### 2.1 Core Command
 ```bash
 python tools/semantic_search/main.py \
     --file-list tmp/search_files.txt \
-    --query "<自然语言查询语句>" \
+    --query "<natural language query>" \
     --top-k 10 \
     --cache-dir .knowledge_cache
 ```
 
-### 2.2 参数规范
-- `--file-list`：必需。指向一个包含待搜索文件路径列表的文本文件。建议放在 `tmp/` 目录下。
-- `--query`：必需。完整的、描述性的句子。例如 "用户对 Agentic AI 核心矛盾的最新思考" 优于 "Agentic AI"。
-- `--top-k`：可选。返回的相关片段数量，默认 5，建议设为 10 以获得更广的上下文。
-- `--cache-dir`：**务必指定为 `.knowledge_cache`**（根目录下），以复用预计算好的特征向量，大幅提升响应速度。
+### 2.2 Parameter Specifications
+- `--file-list`: Required. Points to a text file containing a list of file paths to search. Recommended to place in `tmp/` directory.
+- `--query`: Required. A complete, descriptive sentence. For example, "user's latest thinking on the core contradictions of Agentic AI" is better than "Agentic AI."
+- `--top-k`: Optional. Number of relevant fragments to return, default 5, recommended to set to 10 for broader context.
+- `--cache-dir`: **Must specify as `.knowledge_cache`** (in root directory), to reuse pre-computed feature vectors and significantly improve response speed.
 
 ---
 
-## 3. 标准工作流
+## 3. Standard Workflow
 
-1.  **准备文件列表**：根据需求筛选知识库区域（参考 `rules/WORKSPACE.md`）。
+1.  **Prepare file list**: Filter knowledge base areas based on requirements (see `rules/WORKSPACE.md`).
     ```bash
     mkdir -p tmp
-    # 示例：搜索博客和调研报告
+    # Example: search blog posts and research reports
     find contexts/blog/content contexts/research -name "*.md" > tmp/search_files.txt
     ```
-2.  **执行语义搜索**：
+2.  **Execute semantic search**:
     ```bash
     source .venv/bin/activate
     export OPENAI_API_KEY=$(grep OPENAI_API_KEY .env | cut -d '=' -f2)
     python tools/semantic_search/main.py --file-list tmp/search_files.txt --query "..." --top-k 10 --cache-dir .knowledge_cache
     ```
-3.  **分析与综合**：阅读搜索结果（通常包含 score, source_file, text），结合元数据（日期、分类）进行综合分析。
-4.  **清理**：任务完成后删除 `tmp/search_files.txt`。
+3.  **Analyze and synthesize**: Read search results (usually including score, source_file, text), conduct comprehensive analysis combined with metadata (date, category).
+4.  **Clean up**: Delete `tmp/search_files.txt` after task completion.
 
 ---
 
-## 4. 常用搜索路径
+## 4. Common Search Paths
 
-搜索用户的知识库时，优先考虑以下路径：
-- `contexts/blog/content/`：深度技术文章与核心思考。
-- `contexts/daily_log/`：每日个人活动记录，记录了最真实的想法演变。
-- `contexts/research/`：深度调研结论。
-- `contexts/life_record/data/`：生活录音转录（含每日生活摘要和会议记录）。
-  - 2026年数据：`contexts/life_record/data/<YYYYMMDD>/`
-  - 2025年数据：`contexts/life_record/data/2025/<YYYYMMDD>/`
-  - 每日摘要 `.md` 和原始 transcript `.csv` 都可搜索
-- `rules/skills/`：方法论沉淀。
+When searching the user's knowledge base, prioritize the following paths:
+- `contexts/blog/content/`: In-depth technical articles and core thinking.
+- `contexts/daily_log/`: Daily personal activity records, capturing the most authentic evolution of ideas.
+- `contexts/research/`: In-depth research conclusions.
+- `contexts/life_record/data/`: Life recording transcripts (including daily life summaries and meeting records).
+  - 2026 data: `contexts/life_record/data/<YYYYMMDD>/`
+  - 2025 data: `contexts/life_record/data/2025/<YYYYMMDD>/`
+  - Both daily summary `.md` and raw transcript `.csv` are searchable
+- `rules/skills/`: Methodology consolidation.
 
-以上是常用快捷路径。`--file-list` 可以指向任何文本文件集合，例如：
+These are common shortcut paths. `--file-list` can point to any collection of text files, for example:
 ```bash
-# 搜索生活转录（含2025和2026）
+# Search life transcripts (including 2025 and 2026)
 find contexts/life_record/data -name "*.md" -not -path "*/.venv/*" > tmp/search_files.txt
 
-# 搜索微信聊天记录
+# Search WeChat chat records
 find contexts/wechat -name "*.csv" > tmp/search_files.txt
 
-# 搜索某个调研项目的所有素材
+# Search all materials for a research project
 find contexts/<your-project> -name "*.md" > tmp/search_files.txt
 
-# 搜索任意临时文档
+# Search any temporary documents
 ls adhoc_jobs/some_project/*.txt > tmp/search_files.txt
 ```
 
 ---
-**版本**: 1.2.0
-**最后更新**: 2026-03-15
+**Version**: 1.2.0
+**Last Updated**: 2026-03-15

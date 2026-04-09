@@ -5,103 +5,103 @@ created: 2026-02-23
 updated: 2026-02-23
 ---
 
-# T4. 第一性原理的方法论设计
+# T4. First-Principles Methodology Design
 
-## 1. 核心公理
+## 1. Core Axiom
 
-在采纳任何框架之前，先用第一性原理重述问题（不确定性、约束、成功标准），只借用那些能直接服务于它的部件。方法论不是一套固定的仪式，而是一个为特定用户、特定任务、特定失败模式而设计的产品。
+Before adopting any framework, restate the problem from first principles (uncertainty, constraints, success criteria), and borrow only the components that directly serve it. A methodology is not a fixed set of rituals — it is a product designed for a specific user, a specific task, and a specific failure mode.
 
-## 2. 深度推演
+## 2. Deep Reasoning
 
-### 2.1 框架的隐性成本：世界观锁定
+### 2.1 The Hidden Cost of Frameworks: Worldview Lock-In
 
-完整框架往往是一种世界观锁定。它会偷偷塞进关于角色、阶段与工件的假设，而这些未必匹配你的领域。当你选择一个框架时，你不仅仅是选择了一套工具，而是选择了框架作者对"什么是解决问题的正确方式"的理解。这在领域基础尚未沉淀的时刻特别危险。Agentic AI 仍在快速演变，任何中高度的抽象都注定是脆弱的——AutoGen 从 v0.3 到 v0.4 的转变本质上是一次完全重写，这说明即使是成熟的框架也可能面临根本性的重新思考。过早锁定不仅带来技术债务，还限制了你全面理解领域的能力。当你被框架的抽象所束缚时，你看不到底层的真实机制；当新的理解出现时，你已经投入太多而难以转向。
+Complete frameworks are often a form of worldview lock-in. They quietly smuggle in assumptions about roles, phases, and artifacts — assumptions that may not match your domain. When you choose a framework, you are not merely choosing a set of tools; you are choosing the framework author's understanding of "the correct way to solve problems." This is especially dangerous when the domain's foundations have not yet solidified. Agentic AI is still evolving rapidly, and any mid-to-high-level abstraction is inherently fragile — the transformation from AutoGen v0.3 to v0.4 was essentially a complete rewrite, demonstrating that even mature frameworks may face fundamental rethinking. Locking in too early not only creates technical debt but also limits your ability to fully understand the domain. When you are bound by a framework's abstractions, you cannot see the underlying real mechanisms; when new understanding emerges, you have already invested too much to pivot easily.
 
-### 2.2 人类组织方式与 AI 系统的不匹配
+### 2.2 The Mismatch Between Human Organizational Methods and AI Systems
 
-为了协调人类而构建的方法（仪式、角色粒度、过程确定性），当瓶颈是 AI 可靠性或科学不确定性时，可能会适得其反。BMAD-METHOD 的案例很有启发性：它把人类的职业分工（Analyst、PM、Architect、Scrum Master、Developer、QA）生硬地照搬到了 AI 世界里。但这个假设本身就值得质疑。人类社会之所以有职业分化，是因为我们太弱鸡了——一个人没办法在十几年的教育里同时精通产品、设计、工程、测试。但 LLM 不一样。一个足够强的模型，它本身就可以同时理解业务、设计架构、写代码、做测试。当你给它一个 prompt 说"你是一个资深软件工程师"时，你其实是在限制它，而不是在增强它。你把一个全能全知的 LLM，拉低到了只能戴一顶帽子的弱鸡人类的水平。
+Methods built to coordinate humans (rituals, role granularity, process certainty) may backfire when the bottleneck is AI reliability or scientific uncertainty. The BMAD-METHOD case is instructive: it rigidly transplanted human professional roles (Analyst, PM, Architect, Scrum Master, Developer, QA) into the AI world. But this assumption itself deserves scrutiny. The reason human society has professional differentiation is that we are inherently limited — no single person can master product, design, engineering, and testing simultaneously through more than a decade of education. But LLMs are different. A sufficiently powerful model can simultaneously understand business, design architecture, write code, and do testing. When you give it a prompt saying "you are a senior software engineer," you are actually constraining it, not empowering it. You are pulling an omniscient LLM down to the level of a limited human being who can only wear one hat.
 
-真正的多 agent 价值应该来自上下文隔离，而不是角色扮演。不同 agent 之间的边界，应该是基于任务本身的耦合度来划定的，而不是基于人类社会的职业分工。一个规划 agent 和一个执行 agent 的分工，是因为规划和执行的上下文需求完全不同；而不是因为"PM 和 Developer 在人类社会里是不同的职位"。
+The true value of multi-agent systems should come from context isolation, not role-playing. The boundaries between different agents should be drawn based on the coupling of the task itself, not based on the professional divisions of human society. The division between a planning agent and an execution agent exists because planning and execution have completely different context requirements — not because "PM and Developer are different job titles in human society."
 
-### 2.3 方法论作为产品的设计视角
+### 2.3 Methodology as Product: A Design Perspective
 
-我把方法论当作产品：它需要一个用户（我/团队）、一个要完成的任务（job-to-be-done），以及可被测量的失败模式。这个视角改变了一切。不是问"这个框架看起来是否纪律严明"，而是问"这个方法论是否能帮我解决我的具体问题"。在 FCW/TTC 争论的复盘里，倒推式工程管理与建模不确定性发生冲突；这让我学会按不确定性区间来选方法，而不是按看起来是否"纪律严明"来选。
+I treat methodology as a product: it needs a user (me/the team), a job-to-be-done, and measurable failure modes. This perspective changes everything. The question is not "does this framework seem disciplined?" but "does this methodology help me solve my specific problem?" In the post-mortem of the FCW/TTC debate, backward-engineering management conflicted with modeling uncertainty; this taught me to choose methods based on uncertainty intervals, not based on whether they look "disciplined."
 
-当不确定性很高时（比如探索性研究、新领域的初期），过重的流程会成为负担。你需要的是快速反馈循环、灵活的迭代、最小化的文档。当不确定性很低时（比如已知的工程任务、明确的需求），结构化的流程才有价值——它能确保不遗漏细节、不走弯路。同一个方法论对两种情况都适用，就说明它没有真正理解问题的本质。
+When uncertainty is high (e.g., exploratory research, early stages of a new domain), heavy processes become a burden. What you need is a fast feedback loop, flexible iteration, and minimal documentation. When uncertainty is low (e.g., a well-understood engineering task, clear requirements), structured processes gain value — they ensure no detail is missed and no detours are taken. A methodology that claims to work equally well for both situations has not truly understood the nature of the problem.
 
-### 2.4 流程过重的代价：轻量级任务的杀鸡用牛刀
+### 2.4 The Cost of Process Overload: Using a Sledgehammer for a Nail
 
-BMAD 的标准流程是：市场调研 → 项目简报 → PRD → 架构文档 → 用户故事 → 开发循环 → 验收发布。这个流程对于中大型、需要长期维护的项目是合理的。但问题是，不是所有软件开发都需要这样的流程。AI 时代出现了大量的"用户生成软件"——这些软件可能只服务一个人、只用一次、用完就扔。比如一个脚本每天检查某个网站有没有上新；或者把三十个视频按某种规则重命名。这类任务，你非要让它走一遍 PRD → 架构 → 用户故事的流程，就是杀鸡用牛刀。
+BMAD's standard workflow is: market research → project brief → PRD → architecture document → user stories → development cycle → acceptance and release. This workflow is reasonable for medium-to-large projects requiring long-term maintenance. The problem is that not all software development requires such a process. The AI era has seen the emergence of vast amounts of "user-generated software" — software that may serve a single person, be used once, and then discarded. For example, a script that checks whether a website has new content each day, or a script that renames thirty videos according to some rule. Forcing such tasks through a full PRD → Architecture → User Stories workflow is using a sledgehammer for a nail.
 
-更本质的问题是，BMAD 把敏捷流程当成了一套固定的模板，而不是一套需要因地制宜的原则。真正的敏捷，核心是快速响应变化。但 BMAD 的设计，某种程度上是在用流程的确定性来替代判断的灵活性。这在某些场景下是有价值的，但你必须清楚它的代价。
+The more fundamental problem is that BMAD treats the agile process as a fixed template rather than a set of principles that must be adapted to circumstances. True agility is at its core about responding quickly to change. But BMAD's design, to some extent, uses process certainty as a substitute for the flexibility of judgment. This has value in certain scenarios, but you must be clear about its costs.
 
-### 2.5 可组合性与退出坡道
+### 2.5 Composability and Exit Ramps
 
-最好的方法论是可组合的：它会保留退出坡道（当成本超过收益时，我们停止做什么）。这意味着，方法论的每一个部分都应该是可选的、可替换的，而不是一个紧密耦合的整体。如果你发现某个环节（比如详细的架构文档）对你的项目没有帮助，你应该能够直接跳过它，而不是被迫遵循整个流程。
+The best methodologies are composable: they preserve exit ramps (when costs exceed benefits, we stop doing X). This means every part of a methodology should be optional and replaceable — not a tightly coupled whole. If you find that a certain step (such as detailed architecture documents) isn't helping your project, you should be able to skip it directly rather than being forced to follow the entire process.
 
-这种设计的好处是，它允许你根据实际情况进行调整。你可以从一个轻量级的版本开始，然后根据项目的复杂度逐步添加更多的结构。当项目的复杂度下降时，你也可以简化流程。这种灵活性是在快速变化的环境中生存的关键。
+The benefit of this design is that it allows you to adjust based on actual circumstances. You can start with a lightweight version, then gradually add more structure as the project grows in complexity. When a project's complexity decreases, you can also simplify the process. This flexibility is essential for surviving in a rapidly changing environment.
 
-## 3. 应用判定
+## 3. Application Criteria
 
-### 何时使用
+### When to Use
 
-评估热门 AI 开发框架（例如 agent 角色扮演工作流）、选择研究 vs 工程节奏、以及标准化团队实践时，需要应用第一性原理方法论设计。具体场景包括：
+Apply first-principles methodology design when evaluating popular AI development frameworks (e.g., agent role-playing workflows), choosing between research and engineering cadence, and standardizing team practices. Specific scenarios include:
 
-- **框架选择**：在采纳 BMAD、LangGraph、AutoGen 等框架之前，先问：这个框架的核心假设是什么？这些假设与我的问题是否匹配？如果不匹配，我是应该改变问题来适应框架，还是应该拒绝这个框架？
-- **流程设计**：在为团队或项目设计工作流程时，不要直接复制业界最佳实践，而要从你的具体约束出发。你的主要不确定性是什么？你的失败模式是什么？什么样的流程能最有效地应对这些挑战？
-- **工具选型**：在选择开发工具、框架、或方法论时，评估它们是否真的能解决你的核心问题，而不是被营销宣传所迷惑。
+- **Framework selection**: Before adopting BMAD, LangGraph, AutoGen, or similar frameworks, first ask: what are the core assumptions of this framework? Do these assumptions match my problem? If not, should I change my problem to fit the framework, or should I reject the framework?
+- **Process design**: When designing workflows for a team or project, don't directly copy industry best practices — start from your specific constraints. What is your primary uncertainty? What are your failure modes? What kind of process most effectively addresses these challenges?
+- **Tool selection**: When choosing development tools, frameworks, or methodologies, evaluate whether they truly solve your core problem rather than being dazzled by marketing.
 
-### 如何实践
+### How to Practice
 
-**第一步：显式化假设**
+**Step 1: Make assumptions explicit**
 
-写下框架或方法论的核心假设。比如 BMAD 的假设包括：
-- 软件开发需要明确的阶段划分
-- 不同的角色应该有不同的职责和上下文
-- 文档是项目的重要交付物
-- 流程的确定性能够提升质量
+Write down the core assumptions of the framework or methodology. For example, BMAD's assumptions include:
+- Software development requires clearly defined phases
+- Different roles should have different responsibilities and contexts
+- Documentation is an important project deliverable
+- Process certainty can improve quality
 
-**第二步：映射到约束**
+**Step 2: Map assumptions to constraints**
 
-把每条假设映射到你的具体约束。你的项目是否真的需要这样的阶段划分？你的团队是否真的需要这样的角色分工？你的不确定性是否足够低，以至于流程的确定性能够带来收益？
+Map each assumption to your specific constraints. Does your project truly require this kind of phase division? Does your team truly need this kind of role separation? Is your uncertainty low enough that process certainty can deliver benefits?
 
-**第三步：小规模试点**
+**Step 3: Small-scale pilot**
 
-用明确的成功指标跑一个小规模试点。不要一上来就全面采纳，而是在一个有限的范围内测试这个方法论。衡量的指标应该是：这个方法论是否真的帮助我们更快地完成任务？是否减少了错误？是否提升了代码质量？
+Run a small-scale pilot with explicit success metrics. Don't fully adopt it from the start; test the methodology within a limited scope. The metrics to measure: does this methodology actually help us complete tasks faster? Does it reduce errors? Does it improve code quality?
 
-**第四步：保留模板，丢弃仪式**
+**Step 4: Keep the templates, discard the rituals**
 
-如果试点成功，保留那些真正有价值的部分（比如 PRD 模板、架构文档结构），但丢弃那些纯粹的仪式（比如每日站会、冗长的评审流程）。方法论的价值在于它的工件和思维方式，而不在于它的仪式。
+If the pilot succeeds, retain the parts that are truly valuable (such as PRD templates, architecture document structures), but discard the purely ritualistic parts (such as daily standups, lengthy review processes). The value of a methodology lies in its artifacts and ways of thinking, not in its rituals.
 
-**第五步：持续迭代**
+**Step 5: Continuously iterate**
 
-定期审视你的方法论。每三个月问自己一次：这个方法论是否仍然有效？有什么新的约束或失败模式出现了吗？是否需要调整？方法论不是一成不变的，而是应该随着你对问题的理解而演变。
+Periodically review your methodology. Ask yourself every three months: is this methodology still effective? Have any new constraints or failure modes emerged? Does it need adjustment? Methodologies are not immutable — they should evolve as your understanding of the problem deepens.
 
-## 4. 陷阱与洞察
+## 4. Pitfalls and Insights
 
-### 4.1 "框架崇拜"陷阱
+### 4.1 The "Framework Worship" Trap
 
-很多人会说"我们采用 BMAD"或"我们用 Scrum"，仿佛选择了一个框架就能解决所有问题。但实际上，框架只是一个参考，不是圣经。工具会过气，对工具本质的理解不会。BMAD 值得学的是它对敏捷流程的工程化思考，不是它的框架崇拜。把它当成参考，而不是必须遵守的规范。
+Many people say "we've adopted BMAD" or "we use Scrum" as if choosing a framework solves all problems. But in reality, a framework is only a reference, not a bible. Tools go out of fashion; understanding the essence of tools does not. What's worth learning from BMAD is its engineering thinking about agile processes — not its framework worship. Treat it as a reference, not a mandatory standard.
 
-### 4.2 "一刀切"陷阱
+### 4.2 The "One-Size-Fits-All" Trap
 
-同一个方法论对所有项目都适用，就说明它没有真正理解问题的本质。一个好的方法论应该是可以根据具体情况调整的。如果你发现自己在强行适应一个方法论，而不是方法论在适应你的问题，那就是时候重新评估了。
+A methodology that claims to apply equally to all projects has not truly understood the nature of the problem. A good methodology should be adjustable to specific circumstances. If you find yourself forcibly adapting to a methodology rather than the methodology adapting to your problem, it's time to reassess.
 
-### 4.3 "成本-收益失衡"陷阱
+### 4.3 The "Cost-Benefit Imbalance" Trap
 
-很多团队会投入大量的时间和精力来遵循一个方法论，但从未问过这个投入是否真的带来了收益。当成本超过收益时，你应该有勇气放弃这个方法论，而不是继续坚持。这就是为什么"退出坡道"很重要——它给了你一个优雅地放弃的方式。
+Many teams invest large amounts of time and energy following a methodology but never ask whether this investment is truly yielding returns. When costs exceed benefits, you should have the courage to abandon the methodology rather than persist. This is why "exit ramps" are important — they give you a graceful way to step away.
 
-## 5. 相关公理
+## 5. Related Axioms
 
-- **A06. 框架选择即世界观锁定** — 第一性原理方法论设计的目的，就是帮助你在选择框架时做出有意识的决策，而不是被动地接受框架作者的世界观。
-- **A07. 设计哲学决定能力上限** — 不同的方法论体现了不同的设计哲学。理解这些哲学的差异，能帮助你选择最适合你的方法论。
-- **T01. 基础设施优于组件** — 方法论的价值在于它的基础设施（文档结构、上下文管理、可观测性），而不在于它的组件（工具、框架、流程）。
-- **T02. 结果确定性** — 第一性原理方法论设计的最终目标，是确保你能够可靠地达成预期的结果。
+- **A06. Framework Selection Is Worldview Lock-In** — The purpose of first-principles methodology design is to help you make conscious decisions when choosing frameworks, rather than passively accepting the worldview of the framework's author.
+- **A07. Design Philosophy Determines the Capability Ceiling** — Different methodologies embody different design philosophies. Understanding the differences between these philosophies helps you choose the methodology best suited to you.
+- **T01. Infrastructure Over Components** — The value of a methodology lies in its infrastructure (document structure, context management, observability), not in its components (tools, frameworks, processes).
+- **T02. Result Certainty** — The ultimate goal of first-principles methodology design is to ensure you can reliably achieve intended results.
 
-## 6. 总结
+## 6. Summary
 
-第一性原理方法论设计的核心思想很简单：不要盲目地采纳框架，而要从你的具体问题出发，设计一个为你的问题量身定制的方法论。这个过程包括显式化假设、映射到约束、小规模试点、保留有价值的部分、持续迭代。
+The core idea of first-principles methodology design is simple: don't blindly adopt frameworks — start from your specific problem and design a methodology tailored to it. This process involves making assumptions explicit, mapping them to constraints, running small-scale pilots, retaining the valuable parts, and continuously iterating.
 
-在 AI 时代，这个原则变得更加重要。因为 AI 的能力边界仍在快速变化，任何框架的假设都可能很快过时。最明智的做法是保持框架中立，从第一性原理出发，用库而不是框架，拥抱构建者思维。这样做的成本很低（因为基础系统很简单），但收益很高（因为你保持了完全的灵活性和理解深度）。
+In the AI era, this principle becomes even more important. Because AI's capability boundaries are still changing rapidly, the assumptions of any framework may quickly become outdated. The wisest approach is to remain framework-neutral, start from first principles, use libraries rather than frameworks, and embrace the builder's mindset. The cost of doing so is low (because the underlying system is simple), but the return is high (because you retain complete flexibility and depth of understanding).
 
-最后，记住：方法论是为人服务的，而不是人为方法论服务。当方法论成为负担时，就是时候重新评估了。
+Finally, remember: methodologies exist to serve people, not people to serve methodologies. When a methodology becomes a burden, it's time to reassess.

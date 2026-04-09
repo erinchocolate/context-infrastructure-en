@@ -1,105 +1,105 @@
-# 并行 Subagent 工作流
+# Parallel Subagent Workflow
 
-## 元数据
+## Metadata
 
-- **类型**: Workflow
-- **适用场景**: 调用后台 agent、并行执行多个独立子任务
-- **创建日期**: 2026-02-20
-- **最后更新**: 2026-03-01
-
----
-
-## 何时使用并行模式
-
-满足以下全部条件时，才值得并行：
-
-1. **任务可拆分**：能分解为至少 2 个相对独立的子任务
-2. **子任务有规模**：每个子任务预期需要 ≥5 个 tool call 才能完成
-3. **子任务有价值**：并行执行比串行执行能显著节省时间
-
-不满足时，直接串行执行，不要为了并行而并行。
+- **Type**: Workflow
+- **Applicable Scenarios**: Calling background agents, executing multiple independent sub-tasks in parallel
+- **Creation Date**: 2026-02-20
+- **Last Updated**: 2026-03-01
 
 ---
 
-## 并行执行流程
+## When to Use Parallel Mode
 
-### 1. 评估与分割
+Parallel mode is only worthwhile when all of the following conditions are met:
 
-识别 3-5 个关键维度后，根据任务类型确定 overlap：
+1. **Task is splittable**: Can be decomposed into at least 2 relatively independent sub-tasks
+2. **Sub-tasks have scale**: Each sub-task is expected to require ≥5 tool calls to complete
+3. **Sub-tasks have value**: Parallel execution saves significantly more time than serial execution
 
-| 任务类型 | Overlap 范围 | 原因 |
-|---------|-------------|------|
-| 调研/创造性任务 | 30% - 50% | 交叉验证、查漏补缺 |
-| 代码/执行任务 | 0% - 20% | 效率优先，减少重复 |
+When these conditions are not met, execute serially — don't parallelize for the sake of parallelizing.
 
-### 2. 并行启动
+---
 
-在同一条消息中发出所有调用。使用 `mcp_task()` 根据任务类型选择 category 或 subagent_type：
+## Parallel Execution Process
+
+### 1. Evaluate and Split
+
+After identifying 3-5 key dimensions, determine overlap based on task type:
+
+| Task Type | Overlap Range | Reason |
+|-----------|--------------|--------|
+| Research/Creative tasks | 30% - 50% | Cross-validation, gap-filling |
+| Code/Execution tasks | 0% - 20% | Efficiency first, reduce duplication |
+
+### 2. Launch in Parallel
+
+Issue all calls in the same message. Use `mcp_task()` to select category or subagent_type based on task type:
 
 ```python
-# 调研/分析任务 → 使用 subagent_type
+# Research/analysis tasks → use subagent_type
 mcp_task(
     subagent_type="explore",
     run_in_background=True,
-    prompt="具体维度描述..."
+    prompt="specific dimension description..."
 )
 
-# 实现任务 → 使用 category 委派
+# Implementation tasks → use category delegation
 mcp_task(
     category="deep",
     load_skills=["git-master"],
     run_in_background=True,
-    prompt="具体实现要求..."
+    prompt="specific implementation requirements..."
 )
 ```
 
-每个 subagent 的 prompt 应包含：
-- 具体负责的维度/范围
-- 预期的 overlap 区域（让 agent 知道其他人也在看这部分）
-- 输出格式要求
+Each subagent's prompt should include:
+- The specific dimension/scope they are responsible for
+- Expected overlap areas (let the agent know others are also looking at this part)
+- Output format requirements
 
-### 3. 等待与整合
+### 3. Wait and Integrate
 
-启动后什么都不做，等系统通知。系统会在 subagent 完成时自动推送 `<system-reminder>` 通知。收到通知后，用 `mcp_background_output(task_id="...")` 取回结果，然后交叉验证重叠区域的信息并合成最终输出。
+After launching, do nothing — wait for system notification. The system will automatically push a `<system-reminder>` notification when a subagent completes. After receiving the notification, use `mcp_background_output(task_id="...")` to retrieve results, then cross-validate information in overlapping areas and synthesize final output.
 
-**⚠️ 关于 `background_output` 的常见误解：**
+**⚠️ Common Misconceptions About `background_output`:**
 
-`background_output` 的 `block` 和 `timeout` 参数**不会**让调用阻塞等待任务完成。无论你设置 `timeout=120` 还是 `timeout=600`，它都是**立即返回当前已有的输出**。这意味着：
+The `block` and `timeout` parameters of `background_output` **do not** cause the call to block waiting for task completion. Regardless of whether you set `timeout=120` or `timeout=600`, it **immediately returns whatever output currently exists**. This means:
 
-- **错误做法**：反复调用 `background_output(block=true, timeout=600)` 试图"等"任务完成——每次都会立即返回相同的部分结果，造成无意义的 polling。
-- **正确做法**：发出 background task 后，**结束当前回复**（end your response），等待系统推送的 `<system-reminder>` 通知，收到后再调用 `background_output` 一次性取回完整结果。
+- **Wrong approach**: Repeatedly calling `background_output(block=true, timeout=600)` trying to "wait" for task completion — each call will immediately return the same partial result, causing meaningless polling.
+- **Correct approach**: After issuing a background task, **end your current response**, wait for the system-pushed `<system-reminder>` notification, then call `background_output` once to retrieve the complete result.
 
-简而言之：`background_output` 是**取结果**的工具，不是**等结果**的工具。等待由系统通知机制完成。
-
----
-
-## 示例
-
-### 调研任务（30-50% overlap）
-
-```
-调研「某技术框架的采用情况」
-├─ Agent 1（explore）：核心特性 + 社区活跃度
-├─ Agent 2（librarian）：社区活跃度 + 企业案例
-├─ Agent 3（oracle）：企业案例 + 竞品对比
-└─ Overlap：社区和企业案例都有覆盖，可交叉验证
-```
-
-### 代码任务（0-20% overlap）
-
-```
-实现「用户认证系统」
-├─ Task 1：认证核心逻辑 + Token 管理
-├─ Task 2：数据库模型 + 迁移脚本
-├─ Task 3：API 端点 + 测试用例
-└─ Overlap：接口定义处有少量重叠，确保对接正确
-```
+In short: `background_output` is a tool for **retrieving results**, not for **waiting for results**. Waiting is handled by the system notification mechanism.
 
 ---
 
-## 注意事项
+## Examples
 
-- **不要过度并行**：2-3 个精心设计的 subagent 通常优于 5 个松散的
-- **prompt 质量**：subagent 的 prompt 要足够具体，否则结果会很浅
-- **成本意识**：并行会消耗更多 token，评估是否值得
-- **中间结果**：通常不需要保存，只在主 agent 中整合
+### Research Task (30-50% overlap)
+
+```
+Research "adoption status of a technology framework"
+├─ Agent 1 (explore): Core features + community activity
+├─ Agent 2 (librarian): Community activity + enterprise cases
+├─ Agent 3 (oracle): Enterprise cases + competitor comparison
+└─ Overlap: Community and enterprise cases both covered, enables cross-validation
+```
+
+### Code Task (0-20% overlap)
+
+```
+Implement "user authentication system"
+├─ Task 1: Core authentication logic + Token management
+├─ Task 2: Database models + migration scripts
+├─ Task 3: API endpoints + test cases
+└─ Overlap: Small overlap at interface definitions, ensure correct integration
+```
+
+---
+
+## Notes
+
+- **Don't over-parallelize**: 2-3 carefully designed subagents usually beat 5 loosely defined ones
+- **Prompt quality**: Subagent prompts must be specific enough, otherwise results will be shallow
+- **Cost awareness**: Parallelism consumes more tokens — evaluate whether it is worthwhile
+- **Intermediate results**: Usually do not need to be saved; integrate only in the main agent

@@ -1,4 +1,4 @@
-# AGENTS.md - 美乔的 Context Infrastructure
+# AGENTS.md - Meiqiao's Context Infrastructure
 
 This folder is home. Treat it that way.
 
@@ -14,44 +14,44 @@ Before doing anything else:
 
 ## File Routing
 
-**找文件时，先查 `rules/WORKSPACE.md`，再搜索。** WORKSPACE.md 是这个 workspace 的目录索引，记录了每类内容的存放位置。绝大多数情况下查一下就能定位到目标目录，不需要全盘 glob/grep。如果发现新目录或项目没被收录，顺手更新 WORKSPACE.md。
+**When looking for a file, check `rules/WORKSPACE.md` first, then search.** WORKSPACE.md is the directory index for this workspace, recording where each type of content lives. In most cases a quick look will locate the target directory — no need for a full glob/grep sweep. If you discover a new directory or project that isn't listed, update WORKSPACE.md while you're at it.
 
-**处理特定项目任务前，先读对应的 `projects/<name>/README.md`。** 这是每个项目的 AI 入口，包含项目概述、文档索引和当前工作重点。活跃项目列表见 WORKSPACE.md 快速查询。
+**Before working on a specific project task, read the corresponding `projects/<name>/README.md`.** This is the AI entry point for each project, containing the project overview, documentation index, and current focus. See WORKSPACE.md for the active project list.
 
 ## Skills
 
-**Skills** 是 AI 可复用的能力，包括工作流、API 指南、最佳实践等。
+**Skills** are reusable AI capabilities, including workflows, API guides, best practices, and more.
 
-**重要：遇到"怎么做 X"时，先查 skill 再查系统工具。** 搜索顺序：(1) 下方速查表 → (2) `rules/skills/INDEX.md` → (3) 系统工具。
+**Important: When faced with "how do I do X," check skills before checking system tools.** Search order: (1) quick reference below → (2) `rules/skills/INDEX.md` → (3) system tools.
 
-**需要执行某项任务** → 先查 `rules/skills/INDEX.md` 找到对应的 skill  
-**想添加新能力** → 参考现有 skill 格式，更新 INDEX.md
+**Need to execute a task** → check `rules/skills/INDEX.md` first to find the relevant skill
+**Want to add a new capability** → follow the existing skill format, then update INDEX.md
 
-### 常用 Skill 速查（以 INDEX.md 为准）
+### Common Skill Quick Reference (INDEX.md is authoritative)
 
-**深度调研任务** → `rules/skills/workflow_deep_research_survey.md`  
-- 初步扫描 → 分割维度 → 多 Agent 并行 → 交叉验证 → 写报告  
-- 输出：`contexts/research/`
+**Deep research tasks** → `rules/skills/workflow_deep_research_survey.md`
+- Initial scan → dimension splitting → multi-Agent parallel → cross-validation → write report
+- Output: `contexts/research/`
 
-**调用后台 Agent / 并行 Subagent** → `rules/skills/workflow_parallel_subagents.md`  
-- 何时拆分任务、如何并行派出多个 subagent  
-- 准备调用 `run_in_background=True` 前，先把这个 skill 读一遍再执行  
-- 派出 agent 后等系统通知即可，不需要轮询
+**Running background Agents / parallel Subagents** → `rules/skills/workflow_parallel_subagents.md`
+- When to split tasks, how to dispatch multiple subagents in parallel
+- Before calling `run_in_background=True`, read this skill first
+- After dispatching agents, wait for system notifications — no polling needed
 
-**导入 Confluence 文档** → `rules/skills/workflow_confluence_import.md`  
-- 将 Confluence 页面转为 Markdown 并分类放入 `projects/<name>/docs/`  
-- 配套脚本：`tools/convert_confluence_docs.py`
+**Import Confluence documents** → `rules/skills/workflow_confluence_import.md`
+- Convert Confluence pages to Markdown and categorize into `projects/<name>/docs/`
+- Companion script: `tools/convert_confluence_docs.py`
 
-## Axioms（公理）
+## Axioms
 
-从个人经历提炼的决策原则，用于启发深度思考。分类索引、使用指南和触发词见 `rules/axioms/INDEX.md`。
+Decision principles distilled from personal experience, used to inspire deep thinking. For the categorized index, usage guide, and trigger words, see `rules/axioms/INDEX.md`.
 
-## Memory System（记忆系统）
+## Memory System
 
-三层记忆架构：
-- **L3（全局约束）**：`rules/` 下的所有文件，每次 session 被动加载
-- **L1/L2（动态记忆）**：`contexts/memory/OBSERVATIONS.md`，agent 主动检索
-- **积累方式**：手动触发每日观察 + 每周反思（详见 contexts/memory/ 下的 prompt 模板）
+Three-layer memory architecture:
+- **L3 (global constraints)**: all files under `rules/`, passively loaded each session
+- **L1/L2 (dynamic memory)**: `contexts/memory/OBSERVATIONS.md`, actively retrieved by agents
+- **How to accumulate**: manually trigger daily observations + weekly reflections (see prompt templates in `contexts/memory/`)
 
 ## Safety
 

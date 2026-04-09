@@ -1,44 +1,44 @@
-# WORKSPACE.md - 目录路由速查
+# WORKSPACE.md - Directory Routing Quick Reference
 
-目标：让 AI 每轮 session 都能快速知道"去哪里找/放什么"。**找任何文件前先查这里。**
+Goal: Give the AI a fast way to know "where to find / put what" at the start of every session. **Check here before searching for any file.**
 
-## 路由规则
+## Routing Rules
 
-### 项目与代码
-- **持续进行的项目上下文**（文档、会议记录、决策、状态）：`projects/<project>/`
-- 写代码 / 跑脚本 / 一次性项目：`adhoc_jobs/<project>/`
-- 工具脚本（邮件、语义搜索、分享报告等）：`tools/`
+### Projects and Code
+- **Ongoing project context** (documents, meeting notes, decisions, status): `projects/<project>/`
+- Writing code / running scripts / one-off projects: `adhoc_jobs/<project>/`
+- Utility scripts (email, semantic search, sharing reports, etc.): `tools/`
 
-### 知识与记录
-- 通用调研报告：`contexts/research/`
-- 学到的东西 / 复盘 / 方法论：`contexts/learning/`
-- 每日个人活动记录（与 project 无关）：`contexts/daily_log/`
+### Knowledge and Records
+- General research reports: `contexts/research/`
+- Things learned / retrospectives / methodology: `contexts/learning/`
+- Daily personal activity log (unrelated to any project): `contexts/daily_log/`
 
-### 系统与规则
-- 可复用技术方案 / Skill：`rules/skills/`
-- 核心公理（Axioms）：`rules/axioms/`
+### System and Rules
+- Reusable technical solutions / Skills: `rules/skills/`
+- Core axioms: `rules/axioms/`
 
-## 命名规则
-- 目录和文件名：小写 + 下划线 (snake_case)
-- 临时项目：`tmp_<name>/`
-- **带日期的文档统一格式：`YYYYMMDD_<name>.md`**
-  - 例：`20260408_auto_trigger_chunking_on_table_change.md`
-  - 适用范围：meetings、decisions、adhoc_jobs、daily_log 下所有带时间戳的文档
-  - 日期取文档创建当天，不用分隔符（不用 `2026-04-08` 或 `2026_04_08`）
+## Naming Conventions
+- Directory and file names: lowercase + underscores (snake_case)
+- Temporary projects: `tmp_<name>/`
+- **Dated documents use the unified format: `YYYYMMDD_<name>.md`**
+  - Example: `20260408_auto_trigger_chunking_on_table_change.md`
+  - Applies to: all timestamped documents under meetings, decisions, adhoc_jobs, and daily_log
+  - Use the document creation date; no separators (not `2026-04-08` or `2026_04_08`)
 
-## Python 环境
-- 根目录 `.venv/` 为工作区级环境，用 `uv pip install` 管理依赖
-- 需要隔离时在 `adhoc_jobs/<project>/.venv/` 建独立环境
+## Python Environment
+- The root `.venv/` is the workspace-level environment; manage dependencies with `uv pip install`
+- When isolation is needed, create a dedicated environment at `adhoc_jobs/<project>/.venv/`
 
-## 工具索引
+## Tool Index
 
-| 文件 | 用途 |
+| File | Purpose |
 |---|---|
-| `tools/convert_confluence_docs.py` | Confluence .doc → Markdown 批量转换脚本（配合 `rules/skills/workflow_confluence_import.md`） |
-| `tools/semantic_search/` | 语义搜索工具（见 `rules/skills/semantic_search.md`） |
+| `tools/convert_confluence_docs.py` | Batch conversion script: Confluence .doc → Markdown (used with `rules/skills/workflow_confluence_import.md`) |
+| `tools/semantic_search/` | Semantic search tool (see `rules/skills/semantic_search.md`) |
 
-## 快速查询
+## Quick Reference
 
-<!-- 随着项目增长，在这里添加活跃项目的快捷路由 -->
-<!-- 格式：- `project-name` -> `projects/project_name/` (说明) -->
-- `marvin` → `projects/marvin/` （Contact Energy 内部 RAG 信息检索工具）
+<!-- As projects grow, add quick routes for active projects here -->
+<!-- Format: - `project-name` -> `projects/project_name/` (description) -->
+- `marvin` → `projects/marvin/` (Contact Energy internal RAG information retrieval tool)

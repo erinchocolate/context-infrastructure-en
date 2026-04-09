@@ -5,10 +5,10 @@ import numpy as np
 @dataclass
 class Chunk:
     id: str                    # "{source_file}:{chunk_index}"
-    text: str                  # 分块文本内容
-    embedding: Optional[np.ndarray] = None  # float32 向量
-    source_file: str = ""       # 源文件相对路径
-    header: str = ""           # 所属标题
+    text: str                  # chunk text content
+    embedding: Optional[np.ndarray] = None  # float32 vector
+    source_file: str = ""       # relative path of source file
+    header: str = ""           # heading this chunk belongs to
     position: Tuple[int, int] = (0, 0)  # (start_line, end_line)
     metadata: Dict[str, Any] = None
 
