@@ -29,11 +29,6 @@ Before doing anything else:
 
 ### Skills Quick Reference (INDEX.md is the source of truth)
 
-**Background Agent / Parallel Subagents** → `03 refined/skills/workflow_parallel_subagents.md`  
-- When to split tasks, how to launch multiple subagents in parallel  
-- Read this skill before calling `run_in_background=True`  
-- After launching, wait for the system notification — no polling needed
-
 **Import Confluence Docs** → `03 refined/skills/workflow_confluence_sync.md`  
 - Convert Confluence pages to Markdown and file them under `projects/<name>/`  
 - Companion script: `03 refined/tools/confluence/convert_confluence_docs.py`

@@ -53,7 +53,6 @@ The workspace uses a three-layer architecture at the root. Route content by its 
 | `03 refined/tools/confluence/convert_confluence_docs.py` | Batch conversion: Confluence .doc → Markdown (used with `03 refined/skills/workflow_confluence_sync.md`) |
 | `03 refined/tools/confluence/sync_docs_to_confluence.py` | Push Markdown to Confluence |
 | `03 refined/tools/confluence/pull_from_confluence.py` | Pull from Confluence (version-tracked, idempotent) |
-| `03 refined/tools/semantic_search/` | Semantic search tool (see `03 refined/skills/semantic_search.md`) |
 
 ## Quick Reference
 

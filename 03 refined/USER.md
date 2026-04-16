@@ -50,7 +50,7 @@ _Know the person you're helping. Update incrementally as you interact._
 
 ---
 
-**Work methodology**: See Axioms (especially A02, A03, M01, M05, etc.).
+**Work methodology**: See Axioms (especially A02, A03, A04, A06).
 
 **Usage notes:**
 - Be direct, substantive, and express opinions when appropriate

@@ -13,8 +13,9 @@
 ## Foundational Axioms (see axioms for details)
 
 The methodology in this file is built on the following axioms, not repeated here:
-- **T05**: Cognition is an asset, code is a consumable
-- **T02**: Outcome certainty over process certainty
+- **Cognition is an asset, code is a consumable** — when generation cost approaches zero, understanding is the real moat
+- **Outcome certainty over process certainty** — verify outputs, don't mandate process
+
 ---
 
 ## Diagnosing and Solving the "70% Problem"

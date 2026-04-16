@@ -106,7 +106,6 @@ Even then, first try:
 ## Relationship to Other Skills
 
 - Works with the "70% problem" diagnosis in `bestpractice_ai_programming_mindset.md`
-- Works with the verification mechanism in `bestpractice_staged_approach.md`
 - Works with the Todo task management mechanism in system prompts for task decomposition
 
 ## Change Log
