@@ -16,20 +16,19 @@ tmp_*/
 *.tmp
 
 # Tools — generated state files (contain internal IDs, not for version control)
-tools/.confluence_page_map.json
-tools/.confluence_pull_versions.json
+03 refined/tools/confluence/.confluence_page_map.json
+03 refined/tools/confluence/.confluence_pull_versions.json
 
-# Projects — 所有项目内容含公司内部信息，不上传，保留目录结构
+# 01 raw and 02 trusted — local only, not synced; preserve directory structure
+01 raw/**
+!01 raw/**/
+!01 raw/**/.gitkeep
+
+02 trusted/**
+!02 trusted/**/
+!02 trusted/**/.gitkeep
+
+# Projects — all project content may contain proprietary info; not synced, preserve directory structure
 projects/**
 !projects/**/
 !projects/**/.gitkeep
-
-# Daily log, research, learning & memory — 同上
-contexts/daily_log/*
-!contexts/daily_log/.gitkeep
-contexts/research/*
-!contexts/research/.gitkeep
-contexts/learning/*
-!contexts/learning/.gitkeep
-contexts/memory/*
-!contexts/memory/.gitkeep

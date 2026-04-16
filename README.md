@@ -1,42 +1,45 @@
-# mc-context-infrastructure
+# context-infrastructure-en
 
-Meiqiao's personal AI context infrastructure system, built on the design philosophy of [grapeot/context-infrastructure](https://github.com/grapeot/context-infrastructure).
+meiqiao's context infrastructure, built on the design philosophy of [grapeot/context-infrastructure](https://github.com/grapeot/context-infrastructure).
 
 ## Design Philosophy
 
-The value of AI comes not from model intelligence, but from the context environment you build for it. This environment must accumulate continuously over time, forming a flywheel of "observe -> reflect -> distill -> improve work."
+AI agent's value comes not from model intelligence, but from the context environment you build around it. That environment must accumulate over time, forming a flywheel: input → refine → distill → improve work.
 
-## Three-Layer Memory Architecture
+## Three-Layer Knowledge Architecture - root level
 
 ```
-L3 (global constraints): all files under rules/ -> passively loaded each session
-L1 (daily observations): contexts/memory/OBSERVATIONS.md -> manually triggered
-L2 (weekly reflections): distilled from L1, promoted to L3
+01 raw/       Raw inputs, unprocessed: conversation logs, one-off scripts, unfiltered notes
+02 trusted/   Refinements of raw: OBSERVATIONS.md, personal-understanding retrospectives, structured reflections
+03 refined/   Public-facing, reusable: Axioms, Skills, core guides
+```
+
+## Three-Layer Knowledge Architecture - project level
+
+```
+01 raw/       Raw inputs: meeting notes, requirements docs, bug reports, AI conversation outputs
+02 trusted/   Stable knowledge that helps me/AI understand and operate the project — architecture docs, design decisions, research conclusions, SOPs
+03 refined/   Shareable artifacts: stakeholder briefs, team presentations, documentations etc
 ```
 
 ## Directory Structure
 
 ```
-CLAUDE.md                        # Session entry point (auto-loaded by Claude Code)
-rules/
+AGENTS.md                        # Session entry point
+README.md
+01 raw/                          # All raw inputs (local, not synced)
+02 trusted/                      # Refined observations and reflections (local, not synced)
+03 refined/                      # Public reusable knowledge system
   SOUL.md                        # AI identity and behavioral principles
   USER.md                        # User profile
   COMMUNICATION.md               # Communication style guide
   WORKSPACE.md                   # Directory routing quick reference
+  SOP.md                         # Daily work operations manual
   axioms/                        # Decision principles distilled from experience
     INDEX.md
   skills/                        # Reusable workflows and best practices
     INDEX.md
-contexts/
-  memory/                        # Memory system
-    OBSERVATIONS.md              # Daily observations + weekly reflections
-    PROMPTS.md                   # Observer/Reflector prompt templates
-  research/                      # Research reports
-  learning/                      # Things learned / retrospectives
-  daily_log/                     # Daily personal activity log
-adhoc_jobs/                      # Temporary projects
+  tools/                         # Utility scripts (Confluence sync, semantic search, etc.)
+projects/                        # Active project contexts
+archive/                         # Archived content
 ```
-
-## Acknowledgements
-
-Architecture design references [grapeot/context-infrastructure](https://github.com/grapeot/context-infrastructure).

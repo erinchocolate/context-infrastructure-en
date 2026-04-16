@@ -1,4 +1,4 @@
-# AGENTS.md - Meiqiao's Context Infrastructure
+# AGENTS.md - meiqiao's Context Infrastructure
 
 This folder is home. Treat it that way.
 
@@ -6,52 +6,53 @@ This folder is home. Treat it that way.
 
 Before doing anything else:
 
-1. Read `rules/SOUL.md` — this is who you are
-2. Read `rules/USER.md` — this is who you're helping
-3. Read `rules/WORKSPACE.md` — file routing table, check before searching for files
-4. Read `rules/COMMUNICATION.md` — how to think and communicate (especially for non-coding tasks)
-5. Read `rules/skills/INDEX.md` — understand available skills
+1. Read `03 refined/SOUL.md` — this is who you are
+2. Read `03 refined/USER.md` — this is who you're helping
+3. Read `03 refined/WORKSPACE.md` — file routing table, check before searching for files
+4. Read `03 refined/COMMUNICATION.md` — how to think and communicate (especially for non-coding tasks)
+5. Read `03 refined/skills/INDEX.md` — understand available skills
 
 ## File Routing
 
-**When looking for a file, check `rules/WORKSPACE.md` first, then search.** WORKSPACE.md is the directory index for this workspace, recording where each type of content lives. In most cases a quick look will locate the target directory — no need for a full glob/grep sweep. If you discover a new directory or project that isn't listed, update WORKSPACE.md while you're at it.
+**Before searching for any file, check `03 refined/WORKSPACE.md` first.** WORKSPACE.md is the directory index for this workspace — it records where each type of content lives. In most cases a quick look will point you to the right directory without needing to glob or grep everything. If you discover a new directory or project that isn't listed, update WORKSPACE.md.
 
-**Before working on a specific project task, read the corresponding `projects/<name>/README.md`.** This is the AI entry point for each project, containing the project overview, documentation index, and current focus. See WORKSPACE.md for the active project list.
+**Before working on a specific project, read `projects/<name>/README.md`.** This is the entry point for each project, containing the project overview, document index, and current focus. For a list of active projects, see the Quick Reference section in WORKSPACE.md.
 
 ## Skills
 
-**Skills** are reusable AI capabilities, including workflows, API guides, best practices, and more.
+**Skills** are reusable AI capabilities — workflows, API guides, best practices, and more.
 
-**Important: When faced with "how do I do X," check skills before checking system tools.** Search order: (1) quick reference below → (2) `rules/skills/INDEX.md` → (3) system tools.
+**Important: when you need to do X, check skills before reaching for system tools.** Search order: (1) quick reference below → (2) `03 refined/skills/INDEX.md` → (3) system tools.
 
-**Need to execute a task** → check `rules/skills/INDEX.md` first to find the relevant skill
-**Want to add a new capability** → follow the existing skill format, then update INDEX.md
+**Need to execute a task** → check `03 refined/skills/INDEX.md` for the right skill  
+**Want to add a new capability** → follow the existing skill format and update INDEX.md
 
-### Common Skill Quick Reference (INDEX.md is authoritative)
+### Skills Quick Reference (INDEX.md is the source of truth)
 
-**Deep research tasks** → `rules/skills/workflow_deep_research_survey.md`
-- Initial scan → dimension splitting → multi-Agent parallel → cross-validation → write report
-- Output: `contexts/research/`
+**Background Agent / Parallel Subagents** → `03 refined/skills/workflow_parallel_subagents.md`  
+- When to split tasks, how to launch multiple subagents in parallel  
+- Read this skill before calling `run_in_background=True`  
+- After launching, wait for the system notification — no polling needed
 
-**Running background Agents / parallel Subagents** → `rules/skills/workflow_parallel_subagents.md`
-- When to split tasks, how to dispatch multiple subagents in parallel
-- Before calling `run_in_background=True`, read this skill first
-- After dispatching agents, wait for system notifications — no polling needed
-
-**Import Confluence documents** → `rules/skills/workflow_confluence_import.md`
-- Convert Confluence pages to Markdown and categorize into `projects/<name>/docs/`
-- Companion script: `tools/convert_confluence_docs.py`
+**Import Confluence Docs** → `03 refined/skills/workflow_confluence_sync.md`  
+- Convert Confluence pages to Markdown and file them under `projects/<name>/`  
+- Companion script: `03 refined/tools/confluence/convert_confluence_docs.py`
 
 ## Axioms
 
-Decision principles distilled from personal experience, used to inspire deep thinking. For the categorized index, usage guide, and trigger words, see `rules/axioms/INDEX.md`.
+Decision principles distilled from personal experience, used to inspire deeper thinking. For the categorized index, usage guide, and trigger words, see `03 refined/axioms/INDEX.md`.
 
 ## Memory System
 
-Three-layer memory architecture:
-- **L3 (global constraints)**: all files under `rules/`, passively loaded each session
-- **L1/L2 (dynamic memory)**: `contexts/memory/OBSERVATIONS.md`, actively retrieved by agents
-- **How to accumulate**: manually trigger daily observations + weekly reflections (see prompt templates in `contexts/memory/`)
+The **root-level** three-layer architecture is organized by **degree of knowledge processing** (capture → personal understanding → canonicalization):
+- **01 raw/**: all raw inputs (conversation logs, scripts, unprocessed notes) — stored locally
+- **02 trusted/**: refinements of raw (`OBSERVATIONS.md` daily observations + weekly reflections) 
+- **03 refined/**: passively loaded reusable knowledge system (axioms, skills, core guides)
+
+The **project-level** three-layer architecture is organized by **direction of information flow**:
+- **01 raw/**: all raw inputs (meeting notes, requirements docs, bug reports, AI conversation outputs) — stored locally
+- **02 trusted/**: stable knowledge that helps me/AI understand and operate the project — architecture docs, design decisions, research conclusions, SOPs
+- **03 refined/**: content prepared for audiences outside the project — stakeholder briefs, team presentations, Confluence output docs
 
 ## Safety
 
